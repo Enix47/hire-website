@@ -256,6 +256,7 @@ td.num,th.num{text-align:right}
 <div id="overlay"></div>
 <div id="toastbox"></div>
 
+<script src="local-db.js"></script>
 <script>
 /* ---------- utilities ---------- */
 const H=36e5, D=864e5, TZ=10*H; // Brisbane, no daylight saving
@@ -377,8 +378,10 @@ function errText(e){if(e&&e.code==='invalid_argument')return"That didn't save: y
 async function boot(){
   route();draw();
   const slow=setTimeout(()=>{if(S.dbState==='loading'){S.dbState='slow';render()}},10000);
-  if(!window.claude||!window.claude.use){clearTimeout(slow);S.dbState='none';render();return}
-  const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+  let db=null,user=null;
+  if(window.claude&&window.claude.use){[db,user]=await Promise.all([claude.use('db'),claude.use('user')])}
+  else if(window.LocalDB){db=LocalDB.db;S.local=true;S.uid='local-customer';S.canEdit=true} // local test mode, no sign-in
+  else{clearTimeout(slow);S.dbState='none';render();return}
   S.db=db;S.user=user;
   if(user){S.uid=await user.id();S.canEdit=await user.canEdit()}
   if(!db){clearTimeout(slow);S.dbState='none';render();return}
@@ -388,7 +391,7 @@ async function boot(){
   db.doc('settings/main').onSnapshot(snap=>{S.settings=snap.exists?snap.data():null;render()},fail);
   db.doc('public/availability').onSnapshot(snap=>{S.avail=snap.exists?snap.data():null;render()},fail);
   if(S.uid)db.doc('inbox/'+S.uid).onSnapshot(snap=>{S.mine=snap.exists?snap.data():{requests:{}};render()},()=>{S.mine={requests:{}}});
-  if(S.route==='desk')deskSubscribe();
+  if(S.route==='desk'||S.local)deskSubscribe(); // locally the desk data also drives availability for the customer tab
 }
 function deskSubscribe(){
   if(S.deskSubs||!S.db||!S.canEdit)return;S.deskSubs=true;const db=S.db;
@@ -425,7 +428,7 @@ function bookView(){
   <section class="intro">
     <h1>DJ and PA gear for the weekend, priced up front.</h1>
     <p>Club decks, party speakers and lighting across Brisbane. Every unit is tested before it goes out, and your gear is held as soon as your deposit is paid.</p>
-    <p class="proto">Prototype: example catalogue and placeholder prices. Business name, rates and terms are still to be decided.</p>
+    <p class="proto">Prototype: example catalogue and placeholder prices. Business name, rates and terms are still to be decided.${S.local?' Local test mode: data is saved in this browser only.':''}</p>
   </section>
   ${dataNote()}
   <section class="datebar" aria-label="Hire dates">
@@ -539,7 +542,7 @@ function deskView(){
   const tiles=[['new','New requests',cnt.new,cnt.new?'warm':''],['pickups','Pickups today',cnt.pickups,''],['returns','Returns today',cnt.returns,''],['overdue','Overdue',cnt.overdue,cnt.overdue?'hot':''],['needs','Needs check',cnt.needs,cnt.needs?'warm':''],['expiring','Quotes expiring',cnt.expiring,cnt.expiring?'warm':''],['unpaid','Unpaid, starts ≤ 48 h',cnt.unpaid,cnt.unpaid?'hot':'']];
   const hasDemo=rows.some(r=>r.demo);
   return`<div class="desk-hd"><div><span class="label">${esc(fmtDay(now))} · Brisbane</span><h1>Hire desk</h1></div>
-    <div class="row">${hasDemo?'<button class="btn ghost sm" data-act="cleardemo">Clear demo hires</button>':'<button class="btn ghost sm" data-act="demo">Load demo hires</button>'}</div></div>
+    <div class="row">${hasDemo?'<button class="btn ghost sm" data-act="cleardemo">Clear demo hires</button>':'<button class="btn ghost sm" data-act="demo">Load demo hires</button>'}${S.local?'<button class="btn ghost sm" data-act="resetlocal">Reset local data</button>':''}</div></div>
   <div class="tiles">${tiles.map(([k,l,n,c])=>`<button class="tile ${n?c:'zero'}" data-act="tile" data-v="${k}" aria-pressed="${S.filter===k}"><b>${n}</b><span>${l}</span></button>`).join('')}</div>
   <div class="tabs" role="tablist">${[['hires','Hires'],['week','Next 7 days'],['gear','Gear'],['numbers','Numbers']].map(([k,l])=>`<button role="tab" data-act="dtab" data-v="${k}" aria-selected="${S.deskTab===k}">${l}</button>`).join('')}</div>
   ${S.deskTab==='hires'?hiresTab(rows):S.deskTab==='week'?weekTab(rows):S.deskTab==='gear'?gearTab():numbersTab(rows)}`}
@@ -818,6 +821,7 @@ document.addEventListener('click',async ev=>{const el=ev.target.closest('[data-a
     case'tile':{const v=el.dataset.v;if(v==='needs'){S.deskTab='gear'}else{S.deskTab='hires';S.filter=S.filter===v?'active':v}return render()}
     case'open':S.open=el.dataset.ref;return render();
     case'close':S.open=null;return render();
+    case'resetlocal':if(window.LocalDB){LocalDB.reset();S.open=null;S.sent=null;S.availPublished=false;S.deskLoaded={inbox:false,hires:false,assets:false};toast('Local data reset to the example catalogue')}return;
   }
   if(S.busy)return;S.busy=true;el.disabled=true;
   try{if(act==='demo')await loadDemo();else if(act==='cleardemo')await clearDemo();else if(A[act])await A[act](el)}

@@ -9,7 +9,15 @@ Framework for a Brisbane DJ and PA equipment hire business. It is one page with 
 
 Business name, branding, rates and terms are placeholders. See [`docs/decisions.md`](docs/decisions.md) for what was decided and what is still open.
 
-## How it runs today
+## Test it locally (no sign-in)
+
+1. Download or clone the repo.
+2. Double-click `index.html` to open it in your browser. Keep `local-db.js` in the same folder.
+3. Open a second tab at `index.html#desk` to see the hire desk. The two tabs stay in sync.
+
+In local mode the data lives in your browser only, starting from the example catalogue in `seed/`. You act as both the customer and the staff member. To start over, use **Reset local data** on the hire desk.
+
+## How it runs in Claude
 
 `index.html` is a single self-contained page built for a claude.ai Artifact. It gets its database through the Artifact runtime (`claude.use("db")`). Opened outside Claude, it renders but shows a notice instead of data.
 
