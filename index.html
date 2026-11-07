@@ -1,0 +1,838 @@
+<title>Cue Hire Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: flight-case utility. Aluminium neutrals, gaffer-tape labels for refs and kit lists,
+   cobalt for actions. Shop = catalogue grid + sticky request rail; desk = attention strip + table + drawer. */
+:root{
+  --bg:#ECEEF1; --surface:#FFFFFF; --surface-2:#E2E6EA; --field:#F7F8FA;
+  --ink:#14171B; --muted:#58616C; --line:#CBD1D8; --line-2:#DDE2E7;
+  --accent:#2A44D2; --accent-ink:#FFFFFF; --accent-soft:#E3E8FF;
+  --tape:#EFE8D2; --tape-ink:#2B2720;
+  --ok:#17733F; --ok-soft:#DDF2E5; --warn:#9A5B00; --warn-soft:#FBEFD6; --bad:#B42318; --bad-soft:#FCE4E1;
+  --shadow:0 1px 2px rgba(20,23,27,.06),0 8px 24px rgba(20,23,27,.06);
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:10px; --hdr:60px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1013; --surface:#16191E; --surface-2:#1E232A; --field:#1A1E24;
+  --ink:#E7EAEE; --muted:#97A0AB; --line:#2D333B; --line-2:#242A31;
+  --accent:#8193FF; --accent-ink:#0E1013; --accent-soft:#232B52;
+  --tape:#3A3527; --tape-ink:#EDE3C4;
+  --ok:#52C78D; --ok-soft:#173225; --warn:#EFB24A; --warn-soft:#352813; --bad:#FF7B6F; --bad-soft:#3A1915;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1013; --surface:#16191E; --surface-2:#1E232A; --field:#1A1E24;
+  --ink:#E7EAEE; --muted:#97A0AB; --line:#2D333B; --line-2:#242A31;
+  --accent:#8193FF; --accent-ink:#0E1013; --accent-soft:#232B52;
+  --tape:#3A3527; --tape-ink:#EDE3C4;
+  --ok:#52C78D; --ok-soft:#173225; --warn:#EFB24A; --warn-soft:#352813; --bad:#FF7B6F; --bad-soft:#3A1915;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px))) calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:var(--hdr);flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit}
+.brand b{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:20px;letter-spacing:.02em;text-transform:uppercase}
+.brand span{font-size:12px;color:var(--muted)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px}
+.seg a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600}
+.seg a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* tape label */
+.tape{display:inline-block;background:var(--tape);color:var(--tape-ink);font-family:var(--f-mono);font-size:11px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 12px;
+  clip-path:polygon(0 8%,4px 0,100% 6%,calc(100% - 3px) 50%,100% 94%,calc(100% - 5px) 100%,0 92%,3px 50%)}
+.tape.ref{font-size:13px;letter-spacing:.06em;padding:4px 14px}
+
+/* buttons & fields */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:8px;
+  padding:9px 16px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:var(--accent-ink);text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:6px 11px;font-size:13px}
+.btn.block{width:100%}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-weight:600;cursor:pointer;font-size:14px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field>span{font-size:13px;font-weight:600}
+.field small{color:var(--muted);font-size:12px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{
+  width:100%;min-height:40px;border:1px solid var(--line);border-radius:7px;background:var(--field);padding:8px 10px}
+textarea{min-height:64px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent);flex:none}
+.radios{display:grid;gap:6px}
+.radio{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--field)}
+.radio:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.radio input{margin-top:3px;accent-color:var(--accent)}
+.radio b{display:block;font-size:14px}
+.radio span{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:var(--surface-2);color:var(--muted)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.b-A{background:var(--ok-soft);color:var(--ok)} .b-L{background:var(--warn-soft);color:var(--warn)} .b-B{background:var(--bad-soft);color:var(--bad)}
+.s-requested,.s-confirmed,.s-prepped{background:var(--accent-soft);color:var(--accent)}
+.s-quoted,.s-returned{background:var(--warn-soft);color:var(--warn)}
+.s-out{background:var(--ok-soft);color:var(--ok)}
+.s-overdue,.s-expired{background:var(--bad-soft);color:var(--bad)}
+.s-closed,.s-declined,.s-cancelled{background:var(--surface-2);color:var(--muted)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:6px;background:var(--surface-2);color:var(--ink)}
+
+.notice{border:1px dashed var(--line);border-radius:var(--r);padding:14px 16px;background:var(--surface);color:var(--muted);font-size:14px}
+.notice b{color:var(--ink)}
+.flag{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:8px 12px;border-radius:8px;background:var(--warn-soft);color:var(--warn)}
+.flag.bad{background:var(--bad-soft);color:var(--bad)}
+.flag.ok{background:var(--ok-soft);color:var(--ok)}
+
+/* ===== customer site ===== */
+.intro{display:grid;gap:10px;padding-block:28px 18px;max-width:760px}
+.intro h1{font-size:clamp(28px,4.4vw,46px);font-stretch:112%;font-weight:800;letter-spacing:-.01em}
+.intro p{color:var(--muted);font-size:16px;max-width:62ch}
+.proto{font-size:12px;color:var(--muted)}
+.datebar{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px;box-shadow:var(--shadow)}
+.dates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;align-items:end}
+.period{display:flex;flex-direction:column;gap:2px;padding:6px 4px;min-width:150px}
+.period b{font-family:var(--f-mono);font-size:15px}
+@media (max-width:900px){.dates{grid-template-columns:1fr 1fr}.period{grid-column:1/-1}}
+.shop{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:24px;margin-top:22px;align-items:start}
+@media (max-width:980px){.shop{grid-template-columns:minmax(0,1fr)}}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tabs button{background:none;border:0;padding:10px 14px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card.in{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3{font-size:20px;font-stretch:108%;font-weight:700}
+.card .desc{color:var(--muted);font-size:14px}
+.kit{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:3px;font-size:13px}
+.kit li{display:flex;gap:8px}
+.kit li::before{content:"";width:5px;height:5px;border-radius:1px;background:var(--muted);margin-top:8px;flex:none}
+.rates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
+.rates div{padding:8px 10px;border-right:1px solid var(--line-2)}
+.rates div:last-child{border-right:0}
+.rates dt{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.rates dd{margin:0;font-family:var(--f-mono);font-weight:500;font-size:15px}
+.rates .best{background:var(--accent-soft)}
+.card-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;flex-wrap:wrap}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stepper button{width:34px;height:34px;border:0;background:var(--field);cursor:pointer;font-size:17px}
+.stepper span{min-width:32px;text-align:center;font-family:var(--f-mono)}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+
+.rail{position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);display:flex;flex-direction:column}
+@media (max-width:980px){.rail{position:static}}
+.rail-hd{padding:16px 18px 12px;border-bottom:1px solid var(--line-2);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rail-hd h2{font-size:18px;font-stretch:108%}
+.steps{display:flex;gap:6px;font-size:12px;color:var(--muted)}
+.steps b{color:var(--ink)}
+.rail-bd{padding:14px 18px;display:grid;gap:12px}
+.line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:14px}
+.line small{grid-column:1;color:var(--muted);font-size:12px}
+.line .amt{font-family:var(--f-mono);text-align:right}
+.sum{display:grid;gap:6px;border-top:1px solid var(--line-2);padding-top:12px;font-size:14px}
+.sum div{display:flex;justify-content:space-between;gap:12px}
+.sum .tot{font-size:17px;font-weight:600}
+.sum .num{text-align:right}
+.rail-ft{padding:14px 18px 18px;border-top:1px solid var(--line-2);display:grid;gap:10px}
+.mbar{display:none}
+@media (max-width:980px){
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:1px solid var(--line);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    justify-content:space-between;align-items:center;gap:12px}
+  body.book{padding-bottom:90px}
+}
+.mine{margin-top:40px;display:grid;gap:14px}
+.mine h2{font-size:22px;font-stretch:110%}
+.req{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:14px}
+.req-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.track{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;list-style:none;margin:0;padding:0}
+.track li{display:grid;gap:6px;font-size:12px;color:var(--muted)}
+.track li::before{content:"";height:4px;border-radius:2px;background:var(--surface-2)}
+.track li.done::before{background:var(--accent)}
+.track li.now{color:var(--ink);font-weight:600}
+@media (max-width:640px){.track{grid-template-columns:1fr}.track li{grid-template-columns:4px 1fr;align-items:center;gap:10px}.track li::before{height:16px;width:4px}}
+.quote{background:var(--accent-soft);border-radius:8px;padding:14px;display:grid;gap:10px}
+.sent{display:grid;gap:10px;text-align:left}
+
+/* ===== desk ===== */
+.desk-hd{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding-block:24px 16px}
+.desk-hd h1{font-size:clamp(24px,3.4vw,34px);font-stretch:112%;font-weight:800}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;text-align:left;cursor:pointer;display:grid;gap:2px}
+.tile:hover{border-color:var(--accent)}
+.tile b{font-family:var(--f-mono);font-size:26px;font-weight:500;line-height:1.1}
+.tile span{font-size:13px;color:var(--muted)}
+.tile.hot b{color:var(--bad)} .tile.warm b{color:var(--warn)} .tile.zero b{color:var(--muted)}
+.tile[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar input{max-width:260px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-weight:600}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--line-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--field)}
+td.num,th.num{text-align:right}
+.items{color:var(--muted);font-size:13px;max-width:260px}
+.backdrop{position:fixed;inset:0;background:rgba(10,12,15,.45);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);z-index:21;background:var(--bg);border-left:1px solid var(--line);overflow-y:auto;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) 18px;display:grid;gap:14px;align-content:start}
+.dr-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px;min-width:0}
+.box h3{font-size:16px;font-stretch:105%}
+.kv{display:grid;grid-template-columns:130px minmax(0,1fr);gap:6px 12px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;overflow-wrap:anywhere}
+.mini{width:100%;font-size:13px}
+.mini td,.mini th{padding:6px 4px}
+.mini tbody tr{cursor:default}
+.mini tbody tr:hover td{background:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:13px}
+.log li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px}
+.log time{color:var(--muted);font-family:var(--f-mono);font-size:12px}
+.ci{display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-2)}
+.ci:last-child{border-bottom:0}
+.ci .note{grid-column:1/-1}
+.gear{display:grid;gap:12px}
+.gear-row{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px}
+.assets{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.asset{display:flex;gap:8px;align-items:center;border:1px solid var(--line-2);border-radius:8px;padding:4px 6px 4px 10px;font-size:13px;background:var(--field)}
+.asset select{min-height:30px;padding:2px 6px;font-size:12px;width:auto}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px}
+.bar .track2{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);border-radius:5px}
+.bar .v{text-align:right;font-family:var(--f-mono)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.stat b{display:block;font-family:var(--f-mono);font-size:24px;font-weight:500}
+.day{display:grid;gap:8px}
+.day h3{font-size:15px;font-stretch:105%;padding-top:8px}
+.ev{display:grid;grid-template-columns:70px 92px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer}
+@media (max-width:560px){.ev{grid-template-columns:60px minmax(0,1fr)}.ev .pill{grid-column:2}}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;max-width:min(420px,calc(100% - 32px));box-shadow:var(--shadow)}
+.toast.err{background:var(--bad);color:#fff}
+.section-gap{display:grid;gap:16px}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#book"><b>Cue Hire</b><span>Brisbane DJ &amp; PA hire</span></a>
+  <nav class="seg" aria-label="Site version" id="seg"></nav>
+</div></header>
+<main class="wrap" id="app"></main>
+<div id="overlay"></div>
+<div id="toastbox"></div>
+
+<script>
+/* ---------- utilities ---------- */
+const H=36e5, D=864e5, TZ=10*H; // Brisbane, no daylight saving
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bDate=ms=>new Date(ms+TZ).toISOString().slice(0,10);
+const bTime=ms=>new Date(ms+TZ).toISOString().slice(11,16);
+const bDow=ms=>new Date(ms+TZ).getUTCDay();
+const toMs=(d,t='00:00')=>Date.parse(`${d}T${t}:00+10:00`);
+const addDays=(d,n)=>bDate(toMs(d,'12:00')+n*D);
+const fmt12=t=>{if(!t)return'';let[h,m]=t.split(':').map(Number);const ap=h>=12?'pm':'am';h=h%12||12;return m?`${h}:${String(m).padStart(2,'0')}${ap}`:`${h}${ap}`};
+const fmtDay=ms=>{const d=new Date(ms+TZ);return`${DOW[d.getUTCDay()]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]}`};
+const fmtWhen=ms=>`${fmtDay(ms)}, ${fmt12(bTime(ms))}`;
+const fmtStamp=ms=>`${new Date(ms+TZ).getUTCDate()} ${MON[new Date(ms+TZ).getUTCMonth()]} ${fmt12(bTime(ms))}`;
+const money=(n,c=0)=>new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',minimumFractionDigits:c,maximumFractionDigits:c}).format(n||0);
+const today=()=>bDate(Date.now());
+const genRef=()=>{const a='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='CH-';for(let i=0;i<5;i++)s+=a[Math.floor(Math.random()*a.length)];return s};
+
+/* Defaults used until the desk's settings record loads. Business values are placeholders. */
+const DEFAULTS={depositPct:.3,bondFloor:200,setupRate:90,setupHours:2,missingFee:25,graceHours:1,quoteHours:72,
+  slots:{weekday:['10:00','17:00','19:00'],sat:['09:00','12:00'],sun:[]},
+  zones:[{id:'inner',name:'Inner Brisbane (up to 10 km)',fee:60},{id:'middle',name:'Middle ring (10–25 km)',fee:95},{id:'outer',name:'Outer (25–40 km)',fee:140}],
+  peak:[],pickupNote:'Pickup from our Brisbane store'};
+const CATS=[['packages','Packages'],['dj','Decks & mixers'],['pa','Speakers & subs'],['light','Lights, mics & extras']];
+const STATUS={requested:'Requested',quoted:'Quoted',confirmed:'Confirmed',prepped:'Prepped',out:'Out',returned:'Returned',closed:'Closed',declined:'Declined',cancelled:'Cancelled',expired:'Expired',overdue:'Overdue'};
+const PUB={requested:'received',quoted:'quote_sent',confirmed:'confirmed',prepped:'ready',out:'with_you',returned:'checking',closed:'bond_released',declined:'declined',cancelled:'cancelled',expired:'expired'};
+const PUB_LABEL={received:'Received',quote_sent:'Quote sent',confirmed:'Confirmed',ready:'Ready for pickup',with_you:'With you',checking:'Checking gear',bond_released:'Bond released',declined:'Declined',cancelled:'Cancelled',expired:'Quote expired'};
+const TRACK=['received','quote_sent','confirmed','ready','with_you','checking','bond_released'];
+const HARD=['confirmed','prepped','out'];
+const BAND={A:'Available',L:'Limited',B:'Ask us'};
+
+/* ---------- state ---------- */
+const S={db:null,user:null,uid:null,canEdit:false,dbState:'loading',
+  catalog:{},catLoaded:false,settings:null,avail:null,mine:null,
+  inbox:{},hires:{},assets:{},deskSubs:false,deskLoaded:{inbox:false,hires:false,assets:false},availPublished:false,
+  route:'book',cat:'packages',step:1,cart:{},draft:{},open:null,deskTab:'hires',filter:'active',q:'',sent:null,busy:false};
+const st=()=>({...DEFAULTS,...(S.settings||{})});
+const dv=(k,def='')=>S.draft[k]??def;
+
+(function initDates(){const t=today();const dow=bDow(toMs(t,'12:00'));let add=(5-dow+7)%7;if(add<2)add+=7;const fri=addDays(t,add);
+  Object.assign(S.draft,{ps:fri,pt:'17:00',rs:addDays(fri,3),rt:'10:00',fulfil:'pickup',zone:'inner'});})();
+
+/* ---------- pricing & availability engine ---------- */
+function slotsFor(d){if(!d)return[];const w=bDow(toMs(d,'12:00'));const s=st().slots;return w===0?s.sun:w===6?s.sat:s.weekday}
+function period(){const s=toMs(dv('ps'),dv('pt')),e=toMs(dv('rs'),dv('rt'));return{s,e,ok:Number.isFinite(s)&&Number.isFinite(e)&&e>s}}
+function nightsOf(s,e){return Math.max(1,Math.ceil(((e-s)/H-1)/24))}
+function rateFor(r,s,e){
+  const n=nightsOf(s,e);const opts=[{v:n*r.night,l:n===1?'1 night':`${n} nights`,k:'night'}];
+  const dow=bDow(s);
+  if(dow===5||dow===6){const mon=toMs(addDays(bDate(s),dow===5?3:2),'12:00');if(e<=mon)opts.push({v:r.weekend,l:'Weekend rate',k:'weekend'})}
+  if(n>=4){const w=Math.ceil(n/7);opts.push({v:w*r.week,l:w===1?'Week rate':`${w} weeks`,k:'week'})}
+  if(n>7){const w=Math.floor(n/7),rem=n%7;if(rem)opts.push({v:w*r.week+rem*r.night,l:`${w} wk + ${rem} night${rem>1?'s':''}`,k:'week'})}
+  return opts.reduce((a,b)=>b.v<a.v?b:a);
+}
+function expand(lines){const out={};for(const[id,q]of Object.entries(lines||{})){const c=S.catalog[id];if(!c||!q)continue;
+  if(c.kind==='package')for(const p of c.components||[])out[p.id]=(out[p.id]||0)+p.qty*q;else out[id]=(out[id]||0)+q}return out}
+function estimate(lines,s,e,f){
+  const t=st();let gear=0,bond=0;const rows=[];
+  for(const[id,q]of Object.entries(lines||{})){const c=S.catalog[id];if(!c||!q)continue;const r=rateFor(c.rates,s,e);
+    rows.push({id,name:c.name,qty:q,unit:r.v,label:r.l,amt:r.v*q});gear+=r.v*q;bond+=(c.bond||0)*q}
+  const zone=t.zones.find(z=>z.id===f.zone)||t.zones[0];
+  const delivery=f.fulfil==='pickup'?0:(zone?.fee||0);const setup=f.fulfil==='setup'?t.setupRate*t.setupHours:0;
+  const total=gear+delivery+setup;
+  return{rows,gear,delivery,setup,total,deposit:Math.round(total*t.depositPct),bond:rows.length?Math.max(t.bondFloor,bond):0}
+}
+function bandFor(id,s,e){const a=S.avail;if(!a||!a.bands)return null;const comps=expand({[id]:1});let worst='A';
+  let d=bDate(s);const last=bDate(e);for(let i=0;i<60&&d<=last;i++,d=addDays(d,1)){const idx=Math.round((toMs(d)-toMs(a.from))/D);
+    for(const p in comps){const str=a.bands[p];if(!str)continue;const ch=idx<0||idx>=str.length?'A':str[idx];if(ch==='B')worst='B';else if(ch==='L'&&worst==='A')worst='L'}}
+  return worst}
+function peaksIn(s,e){const a=bDate(s),b=bDate(e);return(st().peak||[]).filter(p=>p.date>=a&&p.date<=b)}
+
+/* desk-side stock maths */
+function assetList(){return Object.values(S.assets)}
+function stockOf(pid){let n=0;for(const a of assetList()){if(a.productId!==pid)continue;if(a.bulk)n+=a.qty||0;else if(a.state!=='faulty'&&a.state!=='retired')n++}return n}
+function needOf(h){return expand(Object.fromEntries((h.rows||[]).map(r=>[r.id,r.qty])))}
+function blockWin(h,pid){const b=S.catalog[pid]?.buffer||{before:2,after:4};let end=h.end;if(h.status==='out'&&Date.now()>end)end=Date.now();return[h.start-b.before*H,end+b.after*H]}
+function stockCheck(h){const res=[];for(const[pid,q]of Object.entries(needOf(h))){const[s,e]=blockWin(h,pid);let used=0;const clashes=[];
+  for(const o of Object.values(S.hires)){if(o.ref===h.ref||!HARD.includes(o.status))continue;const oq=needOf(o)[pid];if(!oq)continue;const[os,oe]=blockWin(o,pid);if(os<e&&s<oe){used+=oq;clashes.push(o.ref)}}
+  const stock=stockOf(pid);res.push({pid,need:q,free:stock-used,stock,clashes,short:stock-used<q})}return res}
+function holder(assetId,exceptRef){for(const o of Object.values(S.hires)){if(o.ref===exceptRef||!['prepped','out'].includes(o.status))continue;
+  for(const ids of Object.values(o.assigned||{}))if(ids.includes(assetId))return o}return null}
+function assetView(a){const h=holder(a.id);if(h)return{k:h.status==='out'?'out':'packed',ref:h.ref};return{k:a.state||'available'}}
+function computeBands(){
+  const from=today(),days=120,now=Date.now();const pids=Object.keys(S.catalog).filter(id=>S.catalog[id].kind!=='package');
+  const needsCheck={};for(const a of assetList())if(!a.bulk&&a.state==='needs_check')needsCheck[a.productId]=(needsCheck[a.productId]||0)+1;
+  const holds=[];for(const h of Object.values(S.hires)){const expired=h.status==='quoted'&&now>h.quoteExpires;
+    const hard=HARD.includes(h.status),pen=h.status==='quoted'&&!expired;if(!hard&&!pen)continue;
+    for(const[pid,q]of Object.entries(needOf(h))){const[s,e]=blockWin(h,pid);holds.push({pid,q,s,e,hard})}}
+  const bands={};for(const pid of pids){const stock=stockOf(pid);let str='';
+    for(let i=0;i<days;i++){const ws=toMs(addDays(from,i)),we=ws+D;let hard=0,pen=0;
+      for(const x of holds)if(x.pid===pid&&x.s<we&&ws<x.e){if(x.hard)hard+=x.q;else pen+=x.q}
+      const avail=stock-(i===0?(needsCheck[pid]||0):0);str+=avail-hard<=0?'B':avail-hard-pen<=0?'L':'A'}
+    bands[pid]=str}
+  return{from,days,bands}}
+async function publishAvail(force){
+  if(!S.db||!S.canEdit||!S.catLoaded)return;const out=computeBands();
+  if(!force&&S.avail&&S.avail.from===out.from&&JSON.stringify(S.avail.bands)===JSON.stringify(out.bands))return;
+  try{await S.db.doc('public/availability').set({...out,updatedAt:Date.now()})}catch(e){toast(errText(e),true)}}
+
+/* desk derived */
+function effStatus(h){const now=Date.now();if(h.status==='quoted'&&now>h.quoteExpires)return'expired';if(h.status==='out'&&now>h.end+st().graceHours*H)return'overdue';return h.status}
+function hireTotal(h){return(h.gear||0)+(h.delivery||0)+(h.setup||0)-(h.discount?.amount||0)}
+function nightValue(h){let v=0;for(const r of h.rows||[]){const c=S.catalog[r.id];if(c)v+=(c.rates?.night||0)*r.qty}return v}
+function reqOf(h){return S.inbox[h.uid]?.requests?.[h.ref]}
+function itemsText(rows){return(rows||[]).map(r=>`${r.qty>1?r.qty+'× ':''}${r.name}`).join(', ')}
+function deskRows(){const rows=[];
+  for(const[uid,doc]of Object.entries(S.inbox))for(const[ref,r]of Object.entries(doc?.requests||{})){if(S.hires[ref])continue;
+    const status=r.status==='declined'?'declined':r.status==='cancelled'?'cancelled':'requested';
+    rows.push({ref,kind:'request',uid,status,raw:status,start:r.start,end:r.end,customer:r.customer,total:r.estimate?.total||0,items:itemsText(r.rows),req:r,created:r.createdAt,demo:!!doc.demo})}
+  for(const h of Object.values(S.hires))rows.push({ref:h.ref,kind:'hire',uid:h.uid,status:effStatus(h),raw:h.status,start:h.start,end:h.end,customer:h.customer,total:hireTotal(h),items:itemsText(h.rows),h,created:h.createdAt,demo:!!h.demo});
+  return rows}
+
+/* ---------- boot & data ---------- */
+let renderQueued=false;function render(){if(renderQueued)return;renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;draw()})}
+function toast(text,err){const box=document.getElementById('toastbox');box.innerHTML=`<div class="toast${err?' err':''}" role="status">${esc(text)}</div>`;clearTimeout(toast.t);toast.t=setTimeout(()=>box.innerHTML='',4200)}
+function errText(e){if(e&&e.code==='invalid_argument')return"That didn't save: your access level can't change this record. Ask the owner for access.";if(e&&e.code==='quota_exceeded')return'Storage is full. Clear demo data or old records, then try again.';return(e&&e.message)||'Something went wrong. Try again.'}
+
+async function boot(){
+  route();draw();
+  const slow=setTimeout(()=>{if(S.dbState==='loading'){S.dbState='slow';render()}},10000);
+  if(!window.claude||!window.claude.use){clearTimeout(slow);S.dbState='none';render();return}
+  const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+  S.db=db;S.user=user;
+  if(user){S.uid=await user.id();S.canEdit=await user.canEdit()}
+  if(!db){clearTimeout(slow);S.dbState='none';render();return}
+  const ready=()=>{clearTimeout(slow);if(S.dbState!=='error')S.dbState='ok';render()};
+  const fail=e=>{clearTimeout(slow);S.dbState='error';S.dbErr=errText(e);render()};
+  db.collection('catalog').onSnapshot(snap=>{const c={};snap.docs.forEach(d=>c[d.id]={...d.data(),id:d.id});S.catalog=c;if(!snap.metadata.fromCache){S.catLoaded=true;ready();maybePublish()}else render()},fail);
+  db.doc('settings/main').onSnapshot(snap=>{S.settings=snap.exists?snap.data():null;render()},fail);
+  db.doc('public/availability').onSnapshot(snap=>{S.avail=snap.exists?snap.data():null;render()},fail);
+  if(S.uid)db.doc('inbox/'+S.uid).onSnapshot(snap=>{S.mine=snap.exists?snap.data():{requests:{}};render()},()=>{S.mine={requests:{}}});
+  if(S.route==='desk')deskSubscribe();
+}
+function deskSubscribe(){
+  if(S.deskSubs||!S.db||!S.canEdit)return;S.deskSubs=true;const db=S.db;
+  const mark=k=>snap=>{if(!snap.metadata.fromCache)S.deskLoaded[k]=true;maybePublish()};
+  db.collection('inbox').onSnapshot(snap=>{const m={};snap.docs.forEach(d=>m[d.id]=d.data());S.inbox=m;mark('inbox')(snap);render()},e=>toast(errText(e),true));
+  db.collection('hires').onSnapshot(snap=>{const m={};snap.docs.forEach(d=>m[d.id]={...d.data(),ref:d.id});S.hires=m;mark('hires')(snap);render()},e=>toast(errText(e),true));
+  db.collection('assets').onSnapshot(snap=>{const m={};snap.docs.forEach(d=>m[d.id]={...d.data(),id:d.id});S.assets=m;mark('assets')(snap);render()},e=>toast(errText(e),true));
+}
+function maybePublish(){const l=S.deskLoaded;if(!S.availPublished&&S.catLoaded&&l.hires&&l.assets){S.availPublished=true;publishAvail(false)}}
+function route(){const h=location.hash.replace('#','');S.route=h==='desk'?'desk':'book';document.body.classList.toggle('book',S.route==='book');if(S.route==='desk')deskSubscribe()}
+window.addEventListener('hashchange',()=>{route();S.open=null;draw();window.scrollTo(0,0)});
+
+/* ---------- drawing ---------- */
+function draw(){
+  const fid=document.activeElement&&document.activeElement.id;let sel=null;
+  try{if(fid&&'selectionStart'in document.activeElement)sel=[document.activeElement.selectionStart,document.activeElement.selectionEnd]}catch(_){}
+  document.getElementById('seg').innerHTML=`<a href="#book"${S.route==='book'?' aria-current="page"':''}>Customer site</a><a href="#desk"${S.route==='desk'?' aria-current="page"':''}>Hire desk</a>`;
+  document.getElementById('app').innerHTML=S.route==='desk'?deskView():bookView();
+  document.getElementById('overlay').innerHTML=S.route==='desk'&&S.open?drawerView():'';
+  if(fid){const el=document.getElementById(fid);if(el){el.focus({preventScroll:true});if(sel)try{el.setSelectionRange(sel[0],sel[1])}catch(_){}}}
+}
+function dataNote(){
+  if(S.dbState==='none')return`<div class="notice"><b>Open this page in Claude while signed in.</b> The catalogue, requests and hire records live in the page's shared database, which only loads for signed-in viewers.</div>`;
+  if(S.dbState==='error')return`<div class="notice"><b>The hire records couldn't load.</b> ${esc(S.dbErr||'')}</div>`;
+  if(S.dbState==='slow')return`<div class="notice"><b>Still connecting to the hire records.</b> Prices and availability will appear once they load.</div>`;
+  return''}
+
+/* customer site */
+function bookView(){
+  const{s,e,ok}=period();const cats=Object.values(S.catalog);const list=cats.filter(c=>S.cat==='packages'?c.kind==='package':c.kind!=='package'&&c.cat===S.cat).sort((a,b)=>(a.order||0)-(b.order||0));
+  const est=ok?estimate(S.cart,s,e,{fulfil:dv('fulfil'),zone:dv('zone')}):null;const count=Object.values(S.cart).reduce((a,b)=>a+b,0);
+  const peaks=ok?peaksIn(s,e):[];
+  return`
+  <section class="intro">
+    <h1>DJ and PA gear for the weekend, priced up front.</h1>
+    <p>Club decks, party speakers and lighting across Brisbane. Every unit is tested before it goes out, and your gear is held as soon as your deposit is paid.</p>
+    <p class="proto">Prototype: example catalogue and placeholder prices. Business name, rates and terms are still to be decided.</p>
+  </section>
+  ${dataNote()}
+  <section class="datebar" aria-label="Hire dates">
+    <div class="dates">
+      ${dateField('ps','pt','Pickup')}
+      ${dateField('rs','rt','Return')}
+      <div class="period"><span class="label">Hire period</span>${ok?`<b>${nightsOf(s,e)} night${nightsOf(s,e)>1?'s':''}</b><span class="small muted">${esc(fmtWhen(s))} → ${esc(fmtWhen(e))}</span>`:`<b>Check dates</b><span class="small muted">Return must be after pickup</span>`}</div>
+    </div>
+    ${peaks.map(p=>`<div class="flag">${esc(p.label)} (${esc(fmtDay(toMs(p.date,'12:00')))}) is a peak date. The deposit is non-refundable but can move to another date within 12 months.</div>`).join('')}
+  </section>
+  <div class="shop">
+    <div style="min-width:0">
+      <div class="tabs" role="tablist">${CATS.map(([k,l])=>`<button role="tab" data-act="cat" data-v="${k}" aria-selected="${S.cat===k}">${l}</button>`).join('')}</div>
+      ${list.length?`<div class="cards">${list.map(c=>card(c,s,e,ok)).join('')}</div>`:`<div class="empty">${S.catLoaded?'Nothing listed in this section yet. Staff add gear from the hire desk.':'Loading the catalogue…'}</div>`}
+    </div>
+    <aside class="rail" id="rail" aria-label="Your request">${rail(est,s,e,ok,count)}</aside>
+  </div>
+  ${mineView()}
+  ${count&&S.step===1?`<div class="mbar"><div><div class="label">Estimate incl. GST</div><b class="num">${money(est?.total)}</b></div><button class="btn" data-act="torail">Review request (${count})</button></div>`:''}`}
+function dateField(dk,tk,label){const slots=slotsFor(dv(dk));const cur=dv(tk);
+  return`<label class="field" for="${dk}"><span>${label} date</span><input type="date" id="${dk}" data-d="${dk}" data-r value="${esc(dv(dk))}" min="${today()}"></label>
+  <label class="field" for="${tk}"><span>${label} time</span><select id="${tk}" data-d="${tk}" data-r>${slots.length?slots.map(t=>`<option value="${t}"${t===cur?' selected':''}>${fmt12(t)}</option>`).join(''):'<option value="">Closed this day</option>'}</select></label>`}
+function card(c,s,e,ok){
+  const q=S.cart[c.id]||0;const best=ok?rateFor(c.rates,s,e):null;const band=ok?bandFor(c.id,s,e):null;
+  return`<article class="card${q?' in':''}">
+    <div class="card-top">${c.guests?`<span class="chip">Up to ${c.guests} guests</span>`:`<span class="chip">${esc(c.unitLabel||'Each')}</span>`}
+      ${band?`<span class="pill b-${band}">${BAND[band]}</span>`:ok?'<span class="pill">Check with us</span>':''}</div>
+    <div><h3>${esc(c.name)}</h3><p class="desc">${esc(c.blurb||'')}</p></div>
+    ${c.kit?.length?`<div><span class="tape">In the case</span><ul class="kit">${c.kit.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></div>`:''}
+    ${c.club?`<p class="small muted">Club-standard gear. Dry hire is open to experienced DJs, with a higher bond.</p>`:''}
+    <dl class="rates">${[['night','Night'],['weekend','Weekend'],['week','Week']].map(([k,l])=>`<div class="${best&&best.k===k?'best':''}"><dt>${l}</dt><dd>${money(c.rates?.[k])}</dd></div>`).join('')}</dl>
+    <div class="card-foot"><span class="small muted">Bond ${money(c.bond)}${best?` · ${esc(best.l)} applies`:''}</span>
+      ${q?`<span class="stepper"><button data-act="dec" data-id="${c.id}" aria-label="Remove one">−</button><span>${q}</span><button data-act="inc" data-id="${c.id}" aria-label="Add one">+</button></span>`:`<button class="btn sm" data-act="inc" data-id="${c.id}">Add</button>`}</div>
+  </article>`}
+function rail(est,s,e,ok,count){
+  if(S.sent)return`<div class="rail-hd"><h2>Request received</h2></div><div class="rail-bd sent">
+    <span class="tape ref">${esc(S.sent)}</span>
+    <p>This isn't a booking yet. We check the gear and send a quote within 2 business hours. The gear is held once the deposit is paid.</p>
+    <p class="small muted">Track it under "Your requests" below.</p></div>
+    <div class="rail-ft"><button class="btn ghost block" data-act="newreq">Start another request</button></div>`;
+  const steps=`<div class="steps"><span>${S.step===1?'<b>1 Gear</b>':'1 Gear'}</span><span>›</span><span>${S.step===2?'<b>2 Your details</b>':'2 Your details'}</span></div>`;
+  if(!count)return`<div class="rail-hd"><h2>Your request</h2>${steps}</div><div class="rail-bd"><p class="muted small">Pick your dates, then add a package or single items. The estimate updates as you go.</p></div>`;
+  const sumHtml=`<div class="sum">
+    <div><span>Gear</span><span class="num">${money(est.gear)}</span></div>
+    ${dv('fulfil')!=='pickup'?`<div><span>Delivery &amp; collection</span><span class="num">${money(est.delivery)}</span></div>`:''}
+    ${dv('fulfil')==='setup'?`<div><span>Setup &amp; pack-down (${st().setupHours} h)</span><span class="num">${money(est.setup)}</span></div>`:''}
+    <div class="tot"><span>Estimate</span><span class="num">${money(est.total)}</span></div>
+    <div class="small muted"><span>Includes GST of</span><span class="num">${money(est.total/11,2)}</span></div>
+    <div class="small"><span>Deposit to hold the gear (${Math.round(st().depositPct*100)}%)</span><span class="num">${money(est.deposit)}</span></div>
+    <div class="small"><span>Refundable bond</span><span class="num">${money(est.bond)}</span></div></div>`;
+  if(S.step===1)return`<div class="rail-hd"><h2>Your request</h2>${steps}</div><div class="rail-bd">
+    ${est.rows.map(r=>`<div class="line"><span>${r.qty>1?`${r.qty}× `:''}${esc(r.name)}</span><span class="amt">${money(r.amt)}</span><small>${esc(r.label)}</small></div>`).join('')}
+    <fieldset style="border:0;padding:0;margin:0" class="radios"><legend class="label" style="margin-bottom:6px">Getting the gear</legend>
+      ${radio('fulfil','pickup','Pickup',esc(st().pickupNote))}${radio('fulfil','delivery','Delivery','We drop off and collect')}${radio('fulfil','setup','Delivery + setup','We set up and pack down')}</fieldset>
+    ${dv('fulfil')!=='pickup'?`<label class="field" for="zone"><span>Delivery zone</span><select id="zone" data-d="zone" data-r>${st().zones.map(z=>`<option value="${z.id}"${z.id===dv('zone')?' selected':''}>${esc(z.name)} · ${money(z.fee)}</option>`).join('')}</select></label>`:''}
+    ${sumHtml}</div>
+    <div class="rail-ft"><button class="btn block" data-act="step" data-v="2"${ok?'':' disabled'}>Continue to your details</button><p class="small muted">No payment now. Availability is confirmed in your quote.</p></div>`;
+  const club=est.rows.some(r=>S.catalog[r.id]?.club);
+  return`<div class="rail-hd"><h2>Your details</h2>${steps}</div><form class="rail-bd" id="reqform" novalidate>
+    <label class="field" for="name"><span>Name</span><input type="text" id="name" data-d="name" autocomplete="name" value="${esc(dv('name'))}"></label>
+    <div class="grid2"><label class="field" for="mobile"><span>Mobile</span><input type="tel" id="mobile" data-d="mobile" autocomplete="tel" placeholder="04xx xxx xxx" value="${esc(dv('mobile'))}"></label>
+    <label class="field" for="email"><span>Email</span><input type="email" id="email" data-d="email" autocomplete="email" value="${esc(dv('email'))}"></label></div>
+    ${dv('fulfil')!=='pickup'?`<label class="field" for="suburb"><span>Delivery suburb</span><input type="text" id="suburb" data-d="suburb" value="${esc(dv('suburb'))}" placeholder="e.g. West End"></label>`:''}
+    ${dv('fulfil')==='setup'?`<label class="field" for="venue"><span>Indoor or outdoor?</span><select id="venue" data-d="venue">${opt('venue',['','Indoor','Outdoor','Both'],'Choose')}</select></label>`:''}
+    <div class="grid2"><label class="field" for="event"><span>Event type <small>(optional)</small></span><select id="event" data-d="event">${opt('event',['','House party','18th / 21st','Wedding','Corporate','Club or bar','Practice at home','Other'],'Choose')}</select></label>
+    <label class="field" for="guests"><span>Guests <small>(optional)</small></span><input type="number" id="guests" data-d="guests" min="1" inputmode="numeric" value="${esc(dv('guests'))}"></label></div>
+    ${club?`<label class="field" for="exp"><span>Your experience with club gear</span><select id="exp" data-d="exp">${opt('exp',['','I play CDJs regularly','Some experience','Beginner: show me at handover','I need a tech on the night'],'Choose')}</select></label>`:''}
+    <label class="field" for="notes"><span>Anything we should know? <small>(optional)</small></span><textarea id="notes" data-d="notes">${esc(dv('notes'))}</textarea></label>
+    <label class="check" for="a18"><input type="checkbox" id="a18" data-d="a18"${dv('a18')?' checked':''}><span>I'm 18 or over and will show photo ID at pickup or delivery.</span></label>
+    <label class="check" for="terms"><input type="checkbox" id="terms" data-d="terms"${dv('terms')?' checked':''}><span>I accept the hire terms: bond, damage, late returns and cancellation.</span></label>
+    ${sumHtml}
+    <div class="row"><button type="button" class="linkbtn" data-act="step" data-v="1">Back</button></div>
+    <button type="submit" class="btn block" id="sendbtn"${S.busy?' disabled':''}>Send request</button>
+    <p class="small muted">You'll get a reference straight away. It's a request, not a booking, until the deposit is paid.</p></form>`}
+function radio(k,v,title,sub){return`<label class="radio" for="${k}-${v}"><input type="radio" name="${k}" id="${k}-${v}" value="${v}" data-d="${k}" data-r${dv(k)===v?' checked':''}><div><b>${title}</b><span>${sub}</span></div></label>`}
+function opt(k,vals,ph){return vals.map(v=>`<option value="${esc(v)}"${dv(k)===v?' selected':''}>${esc(v||ph)}</option>`).join('')}
+function mineView(){
+  const reqs=Object.values(S.mine?.requests||{}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(!reqs.length)return S.uid?`<section class="mine"><h2>Your requests</h2><div class="empty">Requests you send appear here with their status, from received to bond released.</div></section>`:'';
+  return`<section class="mine"><h2>Your requests</h2>${reqs.map(r=>{const idx=TRACK.indexOf(r.status);const exit=idx<0;
+    return`<article class="req"><div class="req-hd"><span class="tape ref">${esc(r.ref)}</span><span class="pill ${exit?'s-cancelled':'s-confirmed'}">${esc(PUB_LABEL[r.status]||r.status)}</span></div>
+      <div class="small"><b>${esc(fmtWhen(r.start))} → ${esc(fmtWhen(r.end))}</b><br><span class="muted">${esc(itemsText(r.rows))}</span></div>
+      ${exit?(r.reason?`<p class="small muted">${esc(r.reason)}</p>`:''):`<ol class="track">${TRACK.map((t,i)=>`<li class="${i<=idx?'done':''} ${i===idx?'now':''}">${PUB_LABEL[t]}</li>`).join('')}</ol>`}
+      ${r.status==='quote_sent'&&r.quote?quoteBox(r):''}
+      ${r.status==='received'?`<p class="small muted">Estimate ${money(r.estimate?.total)} incl. GST. We'll reply with a quote within 2 business hours.</p>`:''}
+    </article>`}).join('')}</section>`}
+function quoteBox(r){const k=x=>`det_${r.ref}_${x}`;const d=r.details;
+  return`<div class="quote"><div class="row" style="justify-content:space-between"><b>Quote ${money(r.quote.total)} incl. GST</b><span class="small">Valid until ${esc(fmtWhen(r.quote.expires))}</span></div>
+    <div class="small">Deposit ${money(r.quote.deposit)} · Refundable bond ${money(r.quote.bond)}</div>
+    ${d?`<div class="flag ok">Booking details received. Pay the deposit to hold the gear.</div>`:`<p class="small">To accept, add your booking details. We need these before taking the deposit.</p>
+    <label class="field" for="${k('addr')}"><span>Residential address</span><input type="text" id="${k('addr')}" data-d="${k('addr')}" value="${esc(dv(k('addr')))}"></label>
+    ${r.fulfil!=='pickup'?`<label class="field" for="${k('venue')}"><span>Venue address</span><input type="text" id="${k('venue')}" data-d="${k('venue')}" value="${esc(dv(k('venue')))}"></label>`:''}
+    <div class="grid2"><label class="field" for="${k('io')}"><span>Indoor or outdoor</span><select id="${k('io')}" data-d="${k('io')}">${opt(k('io'),['','Indoor','Outdoor','Both'],'Choose')}</select></label>
+    <label class="field" for="${k('power')}"><span>Power within 10 m?</span><select id="${k('power')}" data-d="${k('power')}">${opt(k('power'),['','Yes','No','Not sure'],'Choose')}</select></label></div>
+    ${r.fulfil!=='pickup'?`<label class="field" for="${k('access')}"><span>Stairs, lift or long carry?</span><input type="text" id="${k('access')}" data-d="${k('access')}" value="${esc(dv(k('access')))}" placeholder="e.g. one flight of stairs"></label>`:''}
+    <button class="btn sm" data-act="details" data-ref="${esc(r.ref)}">Send booking details</button>`}
+    <button class="btn ghost sm" disabled title="Payments connect later">Pay deposit (payments not connected yet)</button></div>`}
+
+/* desk */
+function deskView(){
+  if(S.dbState!=='ok')return`<div class="desk-hd"><h1>Hire desk</h1></div>${dataNote()||'<div class="notice">Loading…</div>'}`;
+  if(!S.canEdit)return`<div class="desk-hd"><h1>Hire desk</h1></div><div class="notice"><b>The hire desk is for staff.</b> Ask the owner to give you editor access to this page.</div>`;
+  const rows=deskRows();const now=Date.now(),t=today();
+  const cnt={new:rows.filter(r=>r.status==='requested').length,
+    pickups:rows.filter(r=>r.kind==='hire'&&['confirmed','prepped'].includes(r.raw)&&bDate(r.start)===t).length,
+    returns:rows.filter(r=>r.raw==='out'&&bDate(r.end)===t).length,
+    overdue:rows.filter(r=>r.status==='overdue').length,
+    needs:assetList().filter(a=>!a.bulk&&a.state==='needs_check').length,
+    expiring:rows.filter(r=>r.raw==='quoted'&&r.h.quoteExpires-now<24*H).length,
+    unpaid:rows.filter(r=>r.raw==='quoted'&&r.start-now<48*H&&r.start>now).length};
+  const tiles=[['new','New requests',cnt.new,cnt.new?'warm':''],['pickups','Pickups today',cnt.pickups,''],['returns','Returns today',cnt.returns,''],['overdue','Overdue',cnt.overdue,cnt.overdue?'hot':''],['needs','Needs check',cnt.needs,cnt.needs?'warm':''],['expiring','Quotes expiring',cnt.expiring,cnt.expiring?'warm':''],['unpaid','Unpaid, starts ≤ 48 h',cnt.unpaid,cnt.unpaid?'hot':'']];
+  const hasDemo=rows.some(r=>r.demo);
+  return`<div class="desk-hd"><div><span class="label">${esc(fmtDay(now))} · Brisbane</span><h1>Hire desk</h1></div>
+    <div class="row">${hasDemo?'<button class="btn ghost sm" data-act="cleardemo">Clear demo hires</button>':'<button class="btn ghost sm" data-act="demo">Load demo hires</button>'}</div></div>
+  <div class="tiles">${tiles.map(([k,l,n,c])=>`<button class="tile ${n?c:'zero'}" data-act="tile" data-v="${k}" aria-pressed="${S.filter===k}"><b>${n}</b><span>${l}</span></button>`).join('')}</div>
+  <div class="tabs" role="tablist">${[['hires','Hires'],['week','Next 7 days'],['gear','Gear'],['numbers','Numbers']].map(([k,l])=>`<button role="tab" data-act="dtab" data-v="${k}" aria-selected="${S.deskTab===k}">${l}</button>`).join('')}</div>
+  ${S.deskTab==='hires'?hiresTab(rows):S.deskTab==='week'?weekTab(rows):S.deskTab==='gear'?gearTab():numbersTab(rows)}`}
+function filterRows(rows){const f=S.filter,now=Date.now(),t=today();const active=['requested','quoted','confirmed','prepped','out','overdue','returned','expired'];
+  let r=rows.filter(x=>{switch(f){case'active':return active.includes(x.status);case'new':return x.status==='requested';
+    case'pickups':return x.kind==='hire'&&['confirmed','prepped'].includes(x.raw)&&bDate(x.start)===t;case'returns':return x.raw==='out'&&bDate(x.end)===t;
+    case'overdue':return x.status==='overdue';case'expiring':return x.raw==='quoted'&&x.h.quoteExpires-now<24*H;case'unpaid':return x.raw==='quoted'&&x.start-now<48*H&&x.start>now;
+    case'exits':return['declined','cancelled'].includes(x.status);case'all':return true;default:return x.raw===f||x.status===f}});
+  const q=S.q.trim().toLowerCase();if(q)r=r.filter(x=>`${x.ref} ${x.customer?.name} ${x.customer?.mobile} ${x.items}`.toLowerCase().includes(q));
+  return r.sort((a,b)=>a.start-b.start)}
+function nextAction(r){if(r.kind==='request')return r.status==='requested'?'Build quote':'';return{quoted:'Mark deposit paid',expired:'Extend quote',confirmed:'Prep gear',prepped:'Hand out',out:'Check in',overdue:'Check in',returned:'Close & bond'}[r.status]||''}
+function hiresTab(rows){const list=filterRows(rows);
+  const chips=[['active','Active'],['requested','Requested'],['quoted','Quoted'],['confirmed','Confirmed'],['prepped','Prepped'],['out','Out'],['returned','Returned'],['closed','Closed'],['exits','Declined & cancelled'],['all','All']];
+  return`<div class="toolbar"><input type="text" id="deskq" data-d="__q" placeholder="Search ref, name, mobile, gear" value="${esc(S.q)}" aria-label="Search hires">
+    <div class="chips">${chips.map(([k,l])=>`<button data-act="filter" data-v="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div></div>
+  ${list.length?`<div class="tblwrap"><table><thead><tr><th>Ref</th><th>Customer</th><th>Pickup → return</th><th>Gear</th><th class="num">Total</th><th>Status</th><th></th></tr></thead><tbody>
+    ${list.map(r=>`<tr data-act="open" data-ref="${esc(r.ref)}"><td class="mono">${esc(r.ref)}${r.demo?' <span class="chip">demo</span>':''}</td><td>${esc(r.customer?.name)}<div class="small muted">${esc(r.customer?.mobile)}</div></td>
+      <td class="small">${esc(fmtWhen(r.start))}<br><span class="muted">${esc(fmtWhen(r.end))}</span></td><td class="items">${esc(r.items)}</td><td class="num mono">${money(r.total)}</td>
+      <td><span class="pill s-${r.status}">${STATUS[r.status]}</span></td><td>${nextAction(r)?`<button class="btn sm ghost" data-act="open" data-ref="${esc(r.ref)}">${nextAction(r)}</button>`:''}</td></tr>`).join('')}</tbody></table></div>`
+  :`<div class="empty">${rows.length?'No hires match this view.':'No requests yet. They appear here as soon as a customer sends one from the customer site. Load demo hires to try the workflow.'}</div>`}`}
+function weekTab(rows){const t=today();let html='';
+  for(let i=0;i<7;i++){const d=addDays(t,i);const ev=[];
+    for(const r of rows){if(r.kind!=='hire'||['closed','declined','cancelled','expired'].includes(r.status))continue;
+      if(bDate(r.start)===d&&['quoted','confirmed','prepped'].includes(r.raw))ev.push({t:r.start,type:r.h.fulfil==='pickup'?'Pickup':'Delivery',r});
+      if(bDate(r.end)===d&&['out','prepped','confirmed'].includes(r.raw))ev.push({t:r.end,type:r.h.fulfil==='pickup'?'Return':'Collection',r})}
+    ev.sort((a,b)=>a.t-b.t);
+    html+=`<div class="day"><h3>${i===0?'Today, ':i===1?'Tomorrow, ':''}${esc(fmtDay(toMs(d,'12:00')))}</h3>${ev.length?ev.map(x=>`<div class="ev" data-act="open" data-ref="${esc(x.r.ref)}"><span class="mono">${fmt12(bTime(x.t))}</span><span class="chip">${x.type}</span><span>${esc(x.r.ref)} · ${esc(x.r.customer?.name)}<br><span class="small muted">${esc(x.r.items)}</span></span><span class="pill s-${x.r.status}">${STATUS[x.r.status]}</span></div>`).join(''):'<p class="small muted">Nothing booked.</p>'}</div>`}
+  return`<div class="section-gap">${html}</div>`}
+function gearTab(){const prods=Object.values(S.catalog).filter(c=>c.kind!=='package').sort((a,b)=>(a.order||0)-(b.order||0));
+  if(!prods.length)return`<div class="empty">No gear in the catalogue yet.</div>`;
+  const shelf=pid=>assetList().filter(a=>a.productId===pid&&!a.bulk&&a.state==='available'&&!holder(a.id)).length;
+  const pk=Object.values(S.catalog).filter(c=>c.kind==='package');
+  const ready=pk.filter(p=>(p.components||[]).every(cp=>S.catalog[cp.id]?.tracking==='bulk'?stockOf(cp.id)>=cp.qty:shelf(cp.id)>=cp.qty));
+  return`<div class="section-gap"><div class="box"><h3>On the shelf now</h3><p class="small muted">Packages you can promise for tonight: every unit tested, available and not packed for another hire.</p>
+    <div class="row">${pk.map(p=>`<span class="pill ${ready.includes(p)?'b-A':'b-B'}">${esc(p.name)}</span>`).join('')}</div></div>
+  ${CATS.slice(1).map(([k,l])=>{const ps=prods.filter(p=>p.cat===k);if(!ps.length)return'';return`<div class="gear"><h3 style="font-size:16px">${l}</h3>${ps.map(p=>{const as=assetList().filter(a=>a.productId===p.id).sort((a,b)=>(a.tag||'').localeCompare(b.tag||''));
+    return`<div class="gear-row"><div><b>${esc(p.name)}</b><div class="small muted">${money(p.rates?.night)} night · bond ${money(p.bond)} · buffer ${p.buffer?.before??2} h before, ${p.buffer?.after??4} h after</div></div>
+      <div class="small"><span class="mono">${stockOf(p.id)}</span> in fleet${p.tracking==='bulk'?' (bulk count)':` · <span class="mono">${shelf(p.id)}</span> on shelf`}</div>
+      <div class="assets">${as.map(a=>{if(a.bulk)return`<span class="asset">Bulk stock <b class="mono">${a.qty}</b></span>`;const v=assetView(a);
+        return`<span class="asset"><span class="mono">${esc(a.tag)}</span>${v.k==='out'||v.k==='packed'?`<span class="pill s-${v.k==='out'?'out':'prepped'}">${v.k==='out'?'Out':'Packed'} · ${esc(v.ref)}</span>`:
+        `<select data-asset="${esc(a.id)}" aria-label="State of ${esc(a.tag)}">${[['available','Available'],['needs_check','Needs check'],['faulty','Faulty'],['retired','Retired']].map(([s,sl])=>`<option value="${s}"${a.state===s?' selected':''}>${sl}</option>`).join('')}</select>`}</span>`}).join('')||'<span class="small muted">No units recorded.</span>'}</div></div>`}).join('')}</div>`}).join('')}</div>`}
+function numbersTab(rows){const now=Date.now(),from=now-30*D;const hires=Object.values(S.hires);const booked=['confirmed','prepped','out','returned','closed'];
+  const conf=c=>(c.charges||[]).filter(x=>x.status==='confirmed').reduce((a,b)=>a+b.amount,0);
+  const past=hires.filter(h=>booked.includes(h.status)&&h.start>=from&&h.start<=now);
+  const ahead=hires.filter(h=>booked.includes(h.status)&&h.start>now&&h.start<=now+30*D);
+  const rev=past.reduce((a,h)=>a+hireTotal(h)+conf(h),0),up=ahead.reduce((a,h)=>a+hireTotal(h),0);
+  const quoted=hires.filter(h=>h.quotedAt).length,won=hires.filter(h=>h.quotedAt&&(booked.includes(h.status)||h.paidAt)).length;
+  const reqs=rows.filter(r=>r.kind==='request').length+hires.length;
+  const util=Object.values(S.catalog).filter(c=>c.kind!=='package'&&c.tracking!=='bulk').map(p=>{const cap=stockOf(p.id)*30;let used=0;
+    for(const h of hires){if(!booked.includes(h.status))continue;const q=needOf(h)[p.id];if(!q)continue;const s=Math.max(h.start,from),e=Math.min(h.end,now);if(e>s)used+=q*(e-s)/D}
+    return{name:p.name,pct:cap?Math.min(100,Math.round(used/cap*100)):0}}).sort((a,b)=>b.pct-a.pct);
+  const byCat={};for(const h of hires.filter(h=>booked.includes(h.status)))for(const r of h.rows||[]){const c=S.catalog[r.id];const k=c?.kind==='package'?'packages':c?.cat||'other';byCat[k]=(byCat[k]||0)+r.amt}
+  const maxCat=Math.max(1,...Object.values(byCat));
+  return`<div class="section-gap"><div class="stats">
+    <div class="stat"><span class="label">Revenue, last 30 days</span><b>${money(rev)}</b><span class="small muted">${past.length} hire${past.length===1?'':'s'} started</span></div>
+    <div class="stat"><span class="label">Booked, next 30 days</span><b>${money(up)}</b><span class="small muted">${ahead.length} confirmed</span></div>
+    <div class="stat"><span class="label">Quote conversion</span><b>${quoted?Math.round(won/quoted*100):0}%</b><span class="small muted">${won} of ${quoted} quotes paid</span></div>
+    <div class="stat"><span class="label">Requests received</span><b>${reqs}</b><span class="small muted">all time</span></div></div>
+  <div class="box"><h3>Utilisation, last 30 days</h3><p class="small muted">Days hired out of days available. High numbers are what to buy more of; low numbers are candidates to sell.</p>
+    <div class="bars">${util.map(u=>`<div class="bar"><span>${esc(u.name)}</span><div class="track2"><div class="fill" style="width:${u.pct}%"></div></div><span class="v">${u.pct}%</span></div>`).join('')}</div></div>
+  <div class="box"><h3>Revenue by category</h3><div class="bars">${CATS.map(([k,l])=>`<div class="bar"><span>${l}</span><div class="track2"><div class="fill" style="width:${Math.round((byCat[k]||0)/maxCat*100)}%"></div></div><span class="v">${money(byCat[k]||0)}</span></div>`).join('')}</div></div></div>`}
+
+/* drawer */
+function drawerView(){const ref=S.open;const h=S.hires[ref];let req=null,uid=null;
+  if(!h){for(const[u,doc]of Object.entries(S.inbox))if(doc?.requests?.[ref]){req=doc.requests[ref];uid=u}}
+  if(!h&&!req)return'';
+  const status=h?effStatus(h):(req.status==='declined'?'declined':req.status==='cancelled'?'cancelled':'requested');
+  const src=h||req;const details=h?reqOf(h)?.details:req.details;
+  return`<div class="backdrop" data-act="close"></div><aside class="drawer" role="dialog" aria-label="Hire ${esc(ref)}">
+    <div class="dr-hd"><div class="row"><span class="tape ref">${esc(ref)}</span><span class="pill s-${status}">${STATUS[status]}</span></div><button class="btn ghost sm" data-act="close">Close</button></div>
+    <div class="box"><dl class="kv">
+      <dt>Customer</dt><dd>${esc(src.customer?.name)}</dd><dt>Mobile</dt><dd class="mono">${esc(src.customer?.mobile)}</dd><dt>Email</dt><dd>${esc(src.customer?.email)}</dd>
+      <dt>Pickup</dt><dd>${esc(fmtWhen(src.start))}</dd><dt>Return</dt><dd>${esc(fmtWhen(src.end))}</dd>
+      <dt>Getting it</dt><dd>${src.fulfil==='pickup'?'Customer pickup':src.fulfil==='setup'?'Delivery + setup':'Delivery'}${src.suburb?` · ${esc(src.suburb)}`:''}</dd>
+      ${src.eventType?`<dt>Event</dt><dd>${esc(src.eventType)}${src.guests?` · ${esc(src.guests)} guests`:''}</dd>`:''}
+      ${src.experience?`<dt>Experience</dt><dd>${esc(src.experience)}</dd>`:''}${src.venue?`<dt>Venue</dt><dd>${esc(src.venue)}</dd>`:''}
+      ${src.notes?`<dt>Notes</dt><dd>${esc(src.notes)}</dd>`:''}
+      ${details?`<dt>Address</dt><dd>${esc(details.addr)}</dd>${details.venue?`<dt>Venue address</dt><dd>${esc(details.venue)}</dd>`:''}<dt>Venue</dt><dd>${esc([details.io,details.power&&`power nearby: ${details.power}`,details.access].filter(Boolean).join(' · '))}</dd>`:''}
+      ${h?.id?`<dt>ID sighted</dt><dd>${esc(h.id.type)} ending ${esc(h.id.last4)}</dd>`:''}
+    </dl></div>
+    ${h?moneyBox(h):`<div class="box"><h3>Estimate sent with request</h3><table class="mini"><tbody>${(req.rows||[]).map(r=>`<tr><td>${r.qty>1?r.qty+'× ':''}${esc(r.name)}<div class="small muted">${esc(r.label)}</div></td><td class="num mono">${money(r.amt)}</td></tr>`).join('')}</tbody></table>
+      <div class="sum"><div class="tot"><span>Estimate</span><span class="num">${money(req.estimate?.total)}</span></div><div class="small"><span>Bond</span><span class="num">${money(req.estimate?.bond)}</span></div></div></div>`}
+    ${h?actionBox(h,status):requestActions(ref,uid,req,status)}
+    ${h?`<div class="box"><h3>Log</h3><ul class="log">${(h.log||[]).slice().reverse().map(l=>`<li><time>${esc(fmtStamp(l.t))}</time><span>${esc(l.text)}</span></li>`).join('')}</ul></div>`:''}
+  </aside>`}
+function moneyBox(h){const charges=h.charges||[];
+  return`<div class="box"><h3>Quote</h3><table class="mini"><thead><tr><th>Gear</th><th>Rate</th><th class="num">Amount</th></tr></thead><tbody>
+    ${(h.rows||[]).map(r=>{const tags=Object.entries(h.assigned||{}).filter(([pid])=>needOf({rows:[r]})[pid]).flatMap(([,ids])=>ids.map(id=>S.assets[id]?.tag||id));
+      return`<tr><td>${r.qty>1?r.qty+'× ':''}${esc(r.name)}${tags.length?`<div class="small muted mono">${esc(tags.join(' '))}</div>`:''}</td><td class="small">${esc(r.label)}</td><td class="num mono">${money(r.amt)}</td></tr>`}).join('')}
+    ${h.delivery?`<tr><td>Delivery &amp; collection</td><td></td><td class="num mono">${money(h.delivery)}</td></tr>`:''}
+    ${h.setup?`<tr><td>Setup &amp; pack-down</td><td></td><td class="num mono">${money(h.setup)}</td></tr>`:''}
+    ${h.discount?.amount?`<tr><td>Discount<div class="small muted">${esc(h.discount.reason)}</div></td><td></td><td class="num mono">−${money(h.discount.amount)}</td></tr>`:''}
+    </tbody></table>
+    <div class="sum"><div class="tot"><span>Total incl. GST</span><span class="num">${money(hireTotal(h))}</span></div>
+      <div class="small"><span>Deposit ${h.depositPaid?'(paid)':'(not paid)'}</span><span class="num">${money(h.deposit)}</span></div>
+      <div class="small"><span>Bond · ${esc({none:'not taken',held:'held',refunded:'refunded',part:'part refunded'}[h.bondStatus||'none'])}</span><span class="num">${money(h.bond)}</span></div>
+      ${charges.map(c=>`<div class="small"><span>${esc(c.label)} · ${esc(c.status)}</span><span class="num">${money(c.amount)}</span></div>`).join('')}</div>
+    ${(h.faults||[]).length?`<div class="flag bad">Faults logged: ${esc(h.faults.map(f=>`${f.tag}${f.note?` (${f.note})`:''}`).join(', '))}</div>`:''}</div>`}
+function requestActions(ref,uid,req,status){if(status!=='requested')return req.reason?`<div class="box"><p class="small muted">${esc(req.reason)}</p></div>`:'';
+  const k=`dec_${ref}`;
+  return`<div class="box"><h3>Next step</h3><p class="small muted">Building the quote reprices the request at today's rates, pencils the gear in for 72 hours and tells the customer a quote is ready.</p>
+    <div class="row"><button class="btn" data-act="quote" data-ref="${esc(ref)}" data-uid="${esc(uid)}">Build quote</button></div>
+    <label class="field" for="${k}"><span>Or decline, with a reason the customer will see</span><textarea id="${k}" data-d="${k}" placeholder="e.g. Sorry, both CDJ sets are booked that weekend.">${esc(dv(k))}</textarea></label>
+    <div><button class="btn danger sm" data-act="decline" data-ref="${esc(ref)}" data-uid="${esc(uid)}">Decline request</button></div></div>`}
+function actionBox(h,status){const r=h.ref,k=x=>`${x}_${r}`;
+  const cancel=['quoted','expired','confirmed','prepped'].includes(status)?`<details><summary class="small muted" style="cursor:pointer">Cancel this hire</summary><div style="display:grid;gap:8px;margin-top:8px"><textarea id="${k('can')}" data-d="${k('can')}" placeholder="Reason (the customer sees this)">${esc(dv(k('can')))}</textarea><div><button class="btn danger sm" data-act="cancel" data-ref="${esc(r)}">Cancel hire</button></div></div></details>`:'';
+  if(status==='quoted'||status==='expired'){const chk=stockCheck(h);const short=chk.filter(c=>c.short);
+    return`<div class="box"><h3>${status==='expired'?'Quote expired':'Waiting on deposit'}</h3>
+      <p class="small muted">${status==='expired'?'Expired':'Expires'} ${esc(fmtWhen(h.quoteExpires))}. Gear is pencilled in, not held.</p>
+      <div class="grid2"><label class="field" for="${k('disc')}"><span>Discount ($)</span><input type="number" min="0" id="${k('disc')}" data-d="${k('disc')}" value="${esc(dv(k('disc'),h.discount?.amount||''))}"></label>
+      <label class="field" for="${k('discr')}"><span>Discount reason</span><input type="text" id="${k('discr')}" data-d="${k('discr')}" value="${esc(dv(k('discr'),h.discount?.reason||''))}"></label></div>
+      ${h.fulfil!=='pickup'?`<label class="field" for="${k('deliv')}"><span>Delivery fee ($)</span><input type="number" min="0" id="${k('deliv')}" data-d="${k('deliv')}" value="${esc(dv(k('deliv'),h.delivery))}"></label>`:''}
+      <div><button class="btn ghost sm" data-act="savequote" data-ref="${esc(r)}">Update quote</button></div>
+      <h3>Stock check</h3>${short.length?short.map(c=>`<div class="flag bad">${esc(S.catalog[c.pid]?.name||c.pid)}: need ${c.need}, ${Math.max(0,c.free)} free of ${c.stock}. Clashes with ${esc(c.clashes.join(', ')||'faulty or retired units')}.</div>`).join('')
+        +`<label class="field" for="${k('ovr')}"><span>Override reason (logged)</span><input type="text" id="${k('ovr')}" data-d="${k('ovr')}" value="${esc(dv(k('ovr')))}" placeholder="e.g. Hiring in a second sub from a partner"></label>`
+        :`<div class="flag ok">All gear free for these dates, including prep and turnaround buffers.</div>`}
+      <div class="grid2"><label class="field" for="${k('pay')}"><span>Deposit paid by</span><select id="${k('pay')}" data-d="${k('pay')}">${[['card','Card'],['transfer','Bank transfer'],['cash','Cash']].map(([v,l])=>`<option value="${v}"${dv(k('pay'),'card')===v?' selected':''}>${l}</option>`).join('')}</select></label></div>
+      ${reqOf(h)?.details?'':`<div class="flag">The customer hasn't sent booking details (address, venue) yet.</div>`}
+      <div class="row"><button class="btn" data-act="pay" data-ref="${esc(r)}">Mark ${money(h.deposit)} deposit paid</button><button class="btn ghost sm" data-act="extend" data-ref="${esc(r)}">Extend quote 48 h</button></div>${cancel}</div>`}
+  if(status==='confirmed'){const need=needOf(h);let html='';
+    for(const[pid,q]of Object.entries(need)){const p=S.catalog[pid];if(!p)continue;
+      if(p.tracking==='bulk'){html+=`<label class="check" for="${k('kit')}_${pid}"><input type="checkbox" id="${k('kit')}_${pid}" data-d="${k('kit')}_${pid}"${dv(`${k('kit')}_${pid}`)?' checked':''}><span>${q}× ${esc(p.name)} packed</span></label>`;continue}
+      const pool=assetList().filter(a=>a.productId===pid&&!a.bulk&&a.state==='available'&&!holder(a.id,r));
+      for(let i=0;i<q;i++){const key=`as_${r}_${pid}_${i}`;if(S.draft[key]===undefined){const taken=new Set(Object.keys(S.draft).filter(x=>x.startsWith(`as_${r}_${pid}_`)&&x!==key).map(x=>S.draft[x]));const pick=pool.find(a=>!taken.has(a.id));S.draft[key]=pick?pick.id:''}
+        html+=`<label class="field" for="${key}"><span>${esc(p.name)} ${q>1?`#${i+1}`:''}</span><select id="${key}" data-d="${key}"><option value="">Choose a unit</option>${pool.map(a=>`<option value="${esc(a.id)}"${S.draft[key]===a.id?' selected':''}>${esc(a.tag)}</option>`).join('')}</select></label>`}
+      html+=`<label class="check" for="${k('kit')}_${pid}"><input type="checkbox" id="${k('kit')}_${pid}" data-d="${k('kit')}_${pid}"${dv(`${k('kit')}_${pid}`)?' checked':''}><span>Power-on tested and packed: ${esc((p.kit||[]).join(', '))}</span></label>`}
+    return`<div class="box"><h3>Prep the gear</h3><p class="small muted">Assign tagged units now, not at booking, so a unit that fails its test can be swapped.</p>${html}
+      <div><button class="btn" data-act="prep" data-ref="${esc(r)}">Mark prepped</button></div>${cancel}</div>`}
+  if(status==='prepped')return`<div class="box"><h3>Hand out</h3><p class="small muted">Sight photo ID. Record only the type and last 4 characters; never photograph or upload it.</p>
+    <div class="grid2"><label class="field" for="${k('idt')}"><span>ID type</span><select id="${k('idt')}" data-d="${k('idt')}">${opt(k('idt'),['','Driver licence','Passport','Photo card','Proof of age card'],'Choose')}</select></label>
+    <label class="field" for="${k('id4')}"><span>Last 4 characters</span><input type="text" maxlength="4" id="${k('id4')}" data-d="${k('id4')}" value="${esc(dv(k('id4')))}"></label></div>
+    <div class="grid2"><label class="field" for="${k('bndm')}"><span>Bond method</span><select id="${k('bndm')}" data-d="${k('bndm')}">${[['preauth','Card pre-authorisation'],['cash','Cash'],['transfer','Bank transfer']].map(([v,l])=>`<option value="${v}"${dv(k('bndm'),'preauth')===v?' selected':''}>${l}</option>`).join('')}</select></label></div>
+    <label class="check" for="${k('bnd')}"><input type="checkbox" id="${k('bnd')}" data-d="${k('bnd')}"${dv(k('bnd'))?' checked':''}><span>${money(h.bond)} bond taken and hire agreement signed</span></label>
+    <div><button class="btn" data-act="handout" data-ref="${esc(r)}">Hand out gear</button></div>${cancel}</div>`;
+  if(status==='out'||status==='overdue'){const ids=Object.values(h.assigned||{}).flat();const late=lateFee(h);
+    return`<div class="box"><h3>Check in</h3>${status==='overdue'?`<div class="flag bad">Overdue since ${esc(fmtWhen(h.end))}. A late fee of ${money(late.fee)} (${late.days} day${late.days>1?'s':''} at the night rate) will be added as a pending charge for you to confirm or waive.</div>`:''}
+      ${ids.map(id=>{const a=S.assets[id];const p=S.catalog[a?.productId];const key=`ci_${r}_${id}`;return`<div class="ci"><div><b class="mono">${esc(a?.tag||id)}</b> ${esc(p?.name||'')}<div class="small muted">Check: ${esc((p?.kit||[]).join(', '))}</div></div>
+        <select id="${key}" data-d="${key}" data-r aria-label="Condition of ${esc(a?.tag||id)}">${[['ok','All OK'],['missing','Part missing'],['damaged','Damaged']].map(([v,l])=>`<option value="${v}"${dv(key,'ok')===v?' selected':''}>${l}</option>`).join('')}</select>
+        ${dv(key,'ok')!=='ok'?`<input class="note" type="text" id="n${key}" data-d="n${key}" placeholder="What's missing or damaged?" value="${esc(dv('n'+key))}">`:''}</div>`}).join('')}
+      ${Object.entries(needOf(h)).filter(([pid])=>S.catalog[pid]?.tracking==='bulk').map(([pid,q])=>{const key=`bq_${r}_${pid}`;return`<label class="field" for="${key}"><span>${esc(S.catalog[pid].name)} returned (of ${q})</span><input type="number" min="0" max="${q}" id="${key}" data-d="${key}" value="${esc(dv(key,q))}"></label>`}).join('')}
+      <div><button class="btn" data-act="checkin" data-ref="${esc(r)}">Check in</button></div></div>`}
+  if(status==='returned'){const ids=Object.values(h.assigned||{}).flat();const waiting=ids.filter(id=>S.assets[id]?.state==='needs_check');const charges=h.charges||[];
+    const confirmed=charges.filter(c=>c.status==='confirmed').reduce((a,b)=>a+b.amount,0);const mode=dv(k('bd'),confirmed?'deduct':'refund');const amt=Number(dv(k('bda'),confirmed||''))||0;
+    return`<div class="box"><h3>Checks &amp; bond</h3>
+      ${ids.map(id=>{const a=S.assets[id];return`<div class="row" style="justify-content:space-between"><span><b class="mono">${esc(a?.tag||id)}</b> <span class="small muted">${esc(S.catalog[a?.productId]?.name||'')}</span></span>${a?.state==='needs_check'?`<button class="btn sm ghost" data-act="passed" data-asset="${esc(id)}" data-ref="${esc(r)}">Passed check</button>`:`<span class="pill ${a?.state==='faulty'?'s-overdue':'b-A'}">${a?.state==='faulty'?'Faulty':'Checked'}</span>`}</div>`}).join('')}
+      ${charges.map((c,i)=>`<div class="row" style="justify-content:space-between"><span class="small">${esc(c.label)} · <b class="mono">${money(c.amount)}</b></span>${c.status==='pending'?`<span class="row"><button class="btn sm" data-act="charge" data-ref="${esc(r)}" data-i="${i}" data-v="confirmed">Confirm</button><input type="text" id="wv_${r}_${i}" data-d="wv_${r}_${i}" placeholder="Waive reason" style="width:150px;min-height:32px" value="${esc(dv(`wv_${r}_${i}`))}"><button class="btn sm ghost" data-act="charge" data-ref="${esc(r)}" data-i="${i}" data-v="waived">Waive</button></span>`:`<span class="pill">${esc(c.status)}</span>`}</div>`).join('')}
+      <div class="radios">${[['refund',`Refund full bond (${money(h.bond)})`],['deduct','Deduct from bond']].map(([v,l])=>`<label class="radio" for="${k('bd')}-${v}"><input type="radio" name="${k('bd')}" id="${k('bd')}-${v}" value="${v}" data-d="${k('bd')}" data-r${mode===v?' checked':''}><div><b>${l}</b></div></label>`).join('')}</div>
+      ${mode==='deduct'?`<div class="grid2"><label class="field" for="${k('bda')}"><span>Amount ($)</span><input type="number" min="0" id="${k('bda')}" data-d="${k('bda')}" data-r value="${esc(dv(k('bda'),confirmed||''))}"></label><label class="field" for="${k('bdr')}"><span>Reason</span><input type="text" id="${k('bdr')}" data-d="${k('bdr')}" value="${esc(dv(k('bdr')))}"></label></div>
+        ${amt>100?`<label class="check" for="${k('own')}"><input type="checkbox" id="${k('own')}" data-d="${k('own')}"${dv(k('own'))?' checked':''}><span>Owner approved this deduction (over $100)</span></label>`:''}`:''}
+      ${waiting.length?`<div class="flag">${waiting.length} unit${waiting.length>1?'s':''} still need${waiting.length>1?'':'s'} a check before the bond can be closed.</div>`:''}
+      <div><button class="btn" data-act="closehire" data-ref="${esc(r)}"${waiting.length||charges.some(c=>c.status==='pending')?' disabled':''}>Close hire</button></div></div>`}
+  return''}
+function lateFee(h){const over=Date.now()-h.end-st().graceHours*H;if(over<=0)return{days:0,fee:0};const days=Math.ceil(over/D);return{days,fee:days*nightValue(h)}}
+
+/* ---------- writes ---------- */
+async function mirror(uid,ref,status,extra={}){if(!uid)return;try{await S.db.doc('inbox/'+uid).update({requests:{[ref]:{status:PUB[status],updatedAt:Date.now(),...extra}}})}catch(e){/* the customer's record may be gone (demo cleared) */}}
+async function saveHire(ref,patch,text,status,extra){const h=S.hires[ref];const upd={...patch};if(status)upd.status=status;
+  upd.log=[...(h.log||[]),{t:Date.now(),by:S.uid,text}];await S.db.doc('hires/'+ref).update(upd);S.hires[ref]={...h,...upd};
+  if(status)await mirror(h.uid,ref,status,extra);await publishAvail(false)}
+function quoteInfo(h){return{quote:{total:hireTotal(h),deposit:h.deposit,bond:h.bond,expires:h.quoteExpires}}}
+const A={};
+A.quote=async el=>{const ref=el.dataset.ref,uid=el.dataset.uid;const req=S.inbox[uid]?.requests?.[ref];if(!req)return;
+  const est=estimate(req.lines,req.start,req.end,{fulfil:req.fulfil,zone:req.zone});const now=Date.now();
+  const h={ref,uid,demo:uid==='demo'||undefined,status:'quoted',createdAt:req.createdAt||now,quotedAt:now,quoteExpires:now+st().quoteHours*H,
+    customer:req.customer,start:req.start,end:req.end,fulfil:req.fulfil,suburb:req.suburb||'',zone:req.zone||'',venue:req.venue||'',eventType:req.eventType||'',guests:req.guests||'',experience:req.experience||'',notes:req.notes||'',
+    lines:req.lines,rows:est.rows,gear:est.gear,delivery:est.delivery,setup:est.setup,discount:{amount:0,reason:''},deposit:est.deposit,bond:est.bond,bondStatus:'none',depositPaid:false,
+    assigned:{},charges:[],faults:[],payments:[],log:[{t:now,by:S.uid,text:`Quote built: ${money(est.total)}, expires in ${st().quoteHours} h`}]};
+  if(h.demo===undefined)delete h.demo;
+  await S.db.doc('hires/'+ref).set(h);S.hires[ref]=h;await mirror(uid,ref,'quoted',quoteInfo(h));await publishAvail(false);toast(`Quote ${ref} sent`)};
+A.decline=async el=>{const ref=el.dataset.ref,uid=el.dataset.uid;const reason=String(dv(`dec_${ref}`)).trim();if(!reason)return toast('Add a reason so the customer knows why.',true);
+  await S.db.doc('inbox/'+uid).update({requests:{[ref]:{status:'declined',reason,updatedAt:Date.now()}}});toast(`${ref} declined`);S.open=null};
+A.savequote=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const amt=Number(dv(`disc_${ref}`,h.discount?.amount||0))||0;const reason=String(dv(`discr_${ref}`,h.discount?.reason||'')).trim();
+  if(amt>0&&!reason)return toast('A discount needs a reason.',true);const delivery=h.fulfil==='pickup'?0:Number(dv(`deliv_${ref}`,h.delivery))||0;
+  const next={...h,discount:{amount:amt,reason},delivery};next.deposit=Math.round(hireTotal(next)*st().depositPct);
+  await saveHire(ref,{discount:next.discount,delivery,deposit:next.deposit},`Quote updated: ${money(hireTotal(next))}${amt?` (discount ${money(amt)}: ${reason})`:''}`);
+  await mirror(h.uid,ref,'quoted',quoteInfo(next));toast('Quote updated')};
+A.extend=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const exp=Date.now()+48*H;
+  await saveHire(ref,{quoteExpires:exp,status:'quoted'},'Quote extended 48 h','quoted',quoteInfo({...h,quoteExpires:exp}));toast('Quote extended')};
+A.pay=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const short=stockCheck(h).filter(c=>c.short);const ovr=String(dv(`ovr_${ref}`)).trim();
+  if(short.length&&!ovr)return toast("Not enough stock for these dates. Resolve the clash or enter an override reason.",true);
+  const method=dv(`pay_${ref}`,'card');const now=Date.now();
+  await saveHire(ref,{depositPaid:true,paidAt:now,payments:[...(h.payments||[]),{type:'deposit',amount:h.deposit,method,t:now}]},`Deposit ${money(h.deposit)} paid by ${method}${ovr?`. Stock override: ${ovr}`:''}`,'confirmed');toast(`${ref} confirmed`)};
+A.cancel=async el=>{const ref=el.dataset.ref;const reason=String(dv(`can_${ref}`)).trim();if(!reason)return toast('Add a reason for the cancellation.',true);
+  await saveHire(ref,{cancelReason:reason},`Cancelled: ${reason}`,'cancelled',{reason});toast(`${ref} cancelled`)};
+A.prep=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const assigned={};const used=new Set();
+  for(const[pid,q]of Object.entries(needOf(h))){const p=S.catalog[pid];if(!dv(`kit_${ref}_${pid}`))return toast(`Tick the test-and-pack check for ${p?.name||pid}.`,true);
+    if(p?.tracking==='bulk')continue;assigned[pid]=[];
+    for(let i=0;i<q;i++){const id=dv(`as_${ref}_${pid}_${i}`);if(!id)return toast(`Choose a unit for ${p.name}.`,true);if(used.has(id))return toast('The same unit is chosen twice.',true);used.add(id);assigned[pid].push(id)}}
+  const tags=[...used].map(id=>S.assets[id]?.tag||id).join(', ');
+  await saveHire(ref,{assigned},`Prepped and tested: ${tags||'bulk items only'}`,'prepped');toast(`${ref} ready for pickup`)};
+A.handout=async el=>{const ref=el.dataset.ref;const type=dv(`idt_${ref}`),last4=String(dv(`id4_${ref}`)).trim();
+  if(!type||!/^[A-Za-z0-9]{4}$/.test(last4))return toast('Record the ID type and its last 4 characters.',true);if(!dv(`bnd_${ref}`))return toast('Confirm the bond was taken and the agreement signed.',true);
+  const method=dv(`bndm_${ref}`,'preauth');const h=S.hires[ref];
+  await saveHire(ref,{id:{type,last4},bondStatus:'held',bondMethod:method,outAt:Date.now()},`Handed out. ${type} ending ${last4} sighted. Bond ${money(h.bond)} held (${method})`,'out');toast(`${ref} is out`)};
+A.checkin=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const now=Date.now();const charges=[...(h.charges||[])],faults=[...(h.faults||[])];const notes=[];
+  for(const id of Object.values(h.assigned||{}).flat()){const a=S.assets[id];const v=dv(`ci_${ref}_${id}`,'ok');const note=String(dv(`nci_${ref}_${id}`)).trim();
+    if(v==='damaged'){faults.push({assetId:id,tag:a?.tag||id,note,t:now});await S.db.doc('assets/'+id).update({state:'faulty',faultNote:note});notes.push(`${a?.tag} damaged`)}
+    else{await S.db.doc('assets/'+id).update({state:'needs_check'});if(v==='missing'){charges.push({label:`Missing part: ${a?.tag}${note?` (${note})`:''}`,amount:st().missingFee,status:'pending'});notes.push(`${a?.tag} part missing`)}}}
+  for(const[pid,q]of Object.entries(needOf(h))){if(S.catalog[pid]?.tracking!=='bulk')continue;const back=Number(dv(`bq_${ref}_${pid}`,q));if(back<q)charges.push({label:`${q-back}× ${S.catalog[pid].name} not returned`,amount:(q-back)*st().missingFee,status:'pending'})}
+  const late=lateFee(h);if(late.days)charges.push({label:`Late return, ${late.days} day${late.days>1?'s':''}`,amount:late.fee,status:'pending'});
+  await saveHire(ref,{charges,faults,returnedAt:now},`Checked in${notes.length?`: ${notes.join(', ')}`:', all OK'}${late.days?`. Late ${late.days} day(s)`:''}`,'returned');toast(`${ref} checked in`)};
+A.passed=async el=>{const id=el.dataset.asset,ref=el.dataset.ref;await S.db.doc('assets/'+id).update({state:'available'});
+  await saveHire(ref,{},`${S.assets[id]?.tag||id} passed its check`);toast('Unit back on the shelf')};
+A.charge=async el=>{const ref=el.dataset.ref,i=Number(el.dataset.i),v=el.dataset.v;const h=S.hires[ref];const charges=(h.charges||[]).map(c=>({...c}));const c=charges[i];
+  if(v==='waived'){const reason=String(dv(`wv_${ref}_${i}`)).trim();if(!reason)return toast('Add a reason to waive a charge.',true);c.reason=reason}
+  c.status=v;await saveHire(ref,{charges},`${v==='confirmed'?'Confirmed':'Waived'} charge: ${c.label}${c.reason?` (${c.reason})`:''}`)};
+A.closehire=async el=>{const ref=el.dataset.ref;const h=S.hires[ref];const mode=dv(`bd_${ref}`,(h.charges||[]).some(c=>c.status==='confirmed')?'deduct':'refund');
+  let deducted=0,reason='';if(mode==='deduct'){deducted=Number(dv(`bda_${ref}`,(h.charges||[]).filter(c=>c.status==='confirmed').reduce((a,b)=>a+b.amount,0)))||0;reason=String(dv(`bdr_${ref}`)).trim();
+    if(!deducted)return toast('Enter the amount to deduct.',true);if(!reason)return toast('Add a reason for the deduction.',true);if(deducted>100&&!dv(`own_${ref}`))return toast('Deductions over $100 need owner approval.',true);if(deducted>h.bond)return toast('The deduction is more than the bond held.',true)}
+  await saveHire(ref,{bondStatus:deducted?'part':'refunded',bondDeducted:deducted,closedAt:Date.now()},deducted?`Closed. ${money(deducted)} kept from bond: ${reason}. ${money(h.bond-deducted)} refunded`:`Closed. Bond ${money(h.bond)} refunded in full`,'closed');toast(`${ref} closed`)};
+A.details=async el=>{const ref=el.dataset.ref;const r=S.mine.requests[ref];const k=x=>dv(`det_${ref}_${x}`);
+  if(!String(k('addr')).trim())return toast('Add your residential address.',true);if(r.fulfil!=='pickup'&&!String(k('venue')).trim())return toast('Add the venue address.',true);
+  await S.db.doc('inbox/'+S.uid).update({requests:{[ref]:{details:{addr:k('addr'),venue:k('venue')||'',io:k('io')||'',power:k('power')||'',access:k('access')||''},detailsAt:Date.now()}}});toast('Booking details sent')};
+
+async function sendRequest(){
+  const{s,e,ok}=period();if(!ok)return toast('Check your dates: return must be after pickup.',true);
+  if(!S.db||!S.uid)return toast('Open this page in Claude while signed in to send a request.',true);
+  const name=String(dv('name')).trim(),mobile=String(dv('mobile')).replace(/\s+/g,''),email=String(dv('email')).trim();
+  if(!name)return toast('Add your name.',true);if(!/^(\+?61|0)4\d{8}$/.test(mobile))return toast('Enter an Australian mobile number, e.g. 0412 345 678.',true);
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast('Enter a valid email address.',true);
+  if(dv('fulfil')!=='pickup'&&!String(dv('suburb')).trim())return toast('Add the delivery suburb.',true);
+  const club=Object.keys(S.cart).some(id=>S.catalog[id]?.club);if(club&&!dv('exp'))return toast('Tell us your experience with club gear.',true);
+  if(!dv('a18')||!dv('terms'))return toast('Tick both boxes to confirm you are 18+ and accept the hire terms.',true);
+  const est=estimate(S.cart,s,e,{fulfil:dv('fulfil'),zone:dv('zone')});const ref=genRef();
+  const req={ref,createdAt:Date.now(),status:'received',start:s,end:e,lines:{...S.cart},rows:est.rows,
+    estimate:{total:est.total,deposit:est.deposit,bond:est.bond,gear:est.gear,delivery:est.delivery,setup:est.setup},
+    customer:{name,mobile:String(dv('mobile')).trim(),email},fulfil:dv('fulfil'),suburb:String(dv('suburb')).trim(),zone:dv('fulfil')==='pickup'?'':dv('zone'),
+    venue:dv('venue')||'',eventType:dv('event')||'',guests:dv('guests')||'',experience:club?dv('exp'):'',notes:String(dv('notes')).trim(),agreed:{adult:true,terms:true}};
+  const doc=S.db.doc('inbox/'+S.uid);const snap=await doc.get();
+  if(snap.exists)await doc.update({requests:{[ref]:req},updatedAt:Date.now()});else await doc.set({requests:{[ref]:req},updatedAt:Date.now()});
+  S.sent=ref;S.cart={};S.step=1;for(const k of['notes','a18','terms','exp'])delete S.draft[k];
+}
+
+/* demo hires: clearly marked, written only when staff press the button */
+async function loadDemo(){
+  const cat=S.catalog;const need=['party120','clubbooth','party50','allinone','eon715'];if(!need.every(id=>cat[id]))return toast('The demo needs the example catalogue (Party 120, Club Booth, Party 50, All-in-one, EON715).',true);
+  const now=Date.now(),t=today();const at=(d,tm)=>toMs(addDays(t,d),tm);const cust=n=>({name:`Demo customer ${n}`,mobile:'0400 000 00'+n.charCodeAt(0)%10,email:`demo-${n.toLowerCase()}@example.com`});
+  const free={};const take=(pid,q)=>{free[pid]=free[pid]||assetList().filter(a=>a.productId===pid&&!a.bulk&&a.state==='available'&&!holder(a.id)).map(a=>a.id);return free[pid].splice(0,q)};
+  const mk=(ref,n,lines,s,e,status,extra={})=>{const est=estimate(lines,s,e,{fulfil:extra.fulfil||'pickup',zone:'inner'});
+    return{ref,uid:'demo',demo:true,status,createdAt:now-3*D,quotedAt:now-2*D,quoteExpires:now+(extra.exp??40)*H,customer:cust(n),start:s,end:e,fulfil:extra.fulfil||'pickup',suburb:extra.fulfil?'West End':'',zone:extra.fulfil?'inner':'',
+      venue:'',eventType:extra.ev||'',guests:'',experience:'',notes:'',lines,rows:est.rows,gear:est.gear,delivery:est.delivery,setup:est.setup,discount:{amount:0,reason:''},deposit:est.deposit,bond:est.bond,
+      bondStatus:['out','returned'].includes(status)?'held':status==='closed'?'refunded':'none',depositPaid:!['quoted'].includes(status),paidAt:status==='quoted'?undefined:now-D,
+      assigned:{},charges:[],faults:[],payments:[],log:[{t:now-2*D,by:S.uid,text:'Demo hire created'}],...(extra.more||{})}};
+  const hires=[
+    mk('DEMO-Q1','A',{party120:1},at(7,'17:00'),at(10,'10:00'),'quoted',{ev:'21st',fulfil:'delivery',exp:20}),
+    mk('DEMO-C1','B',{clubbooth:1},at(1,'17:00'),at(2,'10:00'),'confirmed',{ev:'Practice at home'}),
+    mk('DEMO-P1','C',{party50:1},at(0,'19:00'),at(3,'10:00'),'prepped',{ev:'House party'}),
+    mk('DEMO-O1','D',{allinone:1},at(-3,'17:00'),at(-1,'10:00'),'out',{ev:'Wedding'}),
+    mk('DEMO-O2','E',{eon715:2},at(-2,'10:00'),at(0,'17:00'),'out',{}),
+    mk('DEMO-X1','F',{clubbooth:1},at(-12,'17:00'),at(-9,'10:00'),'closed',{ev:'Club or bar'})];
+  for(const h of hires){if(h.paidAt===undefined)delete h.paidAt;if(['prepped','out'].includes(h.status)){for(const[pid,q]of Object.entries(needOf(h)))if(cat[pid]?.tracking!=='bulk')h.assigned[pid]=take(pid,q)}
+    if(h.status==='out')h.id={type:'Driver licence',last4:'0000'}}
+  for(const h of hires)await S.db.doc('hires/'+h.ref).set(h);
+  const reqStart=at(5,'17:00'),reqEnd=at(6,'10:00');const est=estimate({clubbooth:1},reqStart,reqEnd,{fulfil:'pickup',zone:'inner'});
+  const pubs={};for(const h of hires)pubs[h.ref]={ref:h.ref,status:PUB[h.status],createdAt:h.createdAt,start:h.start,end:h.end,rows:h.rows,customer:h.customer,fulfil:h.fulfil};
+  pubs['DEMO-R1']={ref:'DEMO-R1',createdAt:now-2*H,status:'received',start:reqStart,end:reqEnd,lines:{clubbooth:1},rows:est.rows,estimate:{total:est.total,deposit:est.deposit,bond:est.bond,gear:est.gear,delivery:0,setup:0},
+    customer:cust('G'),fulfil:'pickup',suburb:'',zone:'',venue:'',eventType:'Practice at home',guests:'',experience:'I play CDJs regularly',notes:'Demo request',agreed:{adult:true,terms:true}};
+  await S.db.doc('inbox/demo').set({demo:true,requests:pubs,updatedAt:now});
+  for(const h of hires)S.hires[h.ref]=h;await publishAvail(false);toast('Demo hires loaded');
+}
+async function clearDemo(){for(const h of Object.values(S.hires))if(h.demo){await S.db.doc('hires/'+h.ref).delete();delete S.hires[h.ref]}
+  await S.db.doc('inbox/demo').delete();await publishAvail(true);S.open=null;toast('Demo hires cleared')}
+
+/* ---------- events ---------- */
+document.addEventListener('click',async ev=>{const el=ev.target.closest('[data-act]');if(!el)return;const act=el.dataset.act;
+  if(el.tagName==='TR'&&ev.target.closest('button')&&ev.target.closest('button')!==el&&ev.target.closest('button').dataset.act!=='open')return;
+  switch(act){
+    case'cat':S.cat=el.dataset.v;return render();
+    case'inc':S.cart[el.dataset.id]=(S.cart[el.dataset.id]||0)+1;S.sent=null;return render();
+    case'dec':{const id=el.dataset.id;S.cart[id]=(S.cart[id]||0)-1;if(S.cart[id]<=0)delete S.cart[id];if(!Object.keys(S.cart).length)S.step=1;return render()}
+    case'step':S.step=Number(el.dataset.v);render();return requestAnimationFrame(()=>document.getElementById('rail')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    case'torail':return document.getElementById('rail')?.scrollIntoView({behavior:'smooth',block:'start'});
+    case'newreq':S.sent=null;return render();
+    case'dtab':S.deskTab=el.dataset.v;return render();
+    case'filter':S.filter=el.dataset.v;return render();
+    case'tile':{const v=el.dataset.v;if(v==='needs'){S.deskTab='gear'}else{S.deskTab='hires';S.filter=S.filter===v?'active':v}return render()}
+    case'open':S.open=el.dataset.ref;return render();
+    case'close':S.open=null;return render();
+  }
+  if(S.busy)return;S.busy=true;el.disabled=true;
+  try{if(act==='demo')await loadDemo();else if(act==='cleardemo')await clearDemo();else if(A[act])await A[act](el)}
+  catch(e){toast(errText(e),true)}finally{S.busy=false;render()}
+});
+document.addEventListener('submit',async ev=>{if(ev.target.id!=='reqform')return;ev.preventDefault();if(S.busy)return;S.busy=true;render();
+  try{await sendRequest()}catch(e){toast(e&&e.code==='invalid_argument'?"Your access to this page is view-only, so the request couldn't be saved. Ask the owner for Contributor access to test sending requests.":errText(e),true)}finally{S.busy=false;render()}});
+function bindVal(el){const k=el.dataset.d;if(!k)return false;const v=el.type==='checkbox'?el.checked:el.value;if(k==='__q'){S.q=v;return true}S.draft[k]=v;return true}
+document.addEventListener('input',ev=>{const el=ev.target;if(!bindVal(el))return;if(el.dataset.d==='__q')render()});
+document.addEventListener('change',async ev=>{const el=ev.target;
+  if(el.dataset.asset){if(S.busy)return;S.busy=true;try{await S.db.doc('assets/'+el.dataset.asset).update({state:el.value});await publishAvail(false);toast('Unit updated')}catch(e){toast(errText(e),true)}finally{S.busy=false;render()}return}
+  if(!bindVal(el))return;
+  if(el.dataset.d==='ps'||el.dataset.d==='rs'){const tk=el.dataset.d==='ps'?'pt':'rt';const sl=slotsFor(el.value);if(!sl.includes(S.draft[tk]))S.draft[tk]=sl[0]||''}
+  if(el.hasAttribute('data-r'))render()});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&S.open){S.open=null;render()}});
+setInterval(()=>{if(S.route==='desk'&&!S.open&&!S.busy)render()},60000); // keeps overdue/expiry flags current
+boot();
+</script>

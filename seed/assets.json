@@ -1,0 +1,212 @@
+{
+  "cdj-01": {
+    "productId": "cdj3000",
+    "tag": "CDJ-01",
+    "state": "available",
+    "example": true
+  },
+  "cdj-02": {
+    "productId": "cdj3000",
+    "tag": "CDJ-02",
+    "state": "available",
+    "example": true
+  },
+  "cdj-03": {
+    "productId": "cdj3000",
+    "tag": "CDJ-03",
+    "state": "available",
+    "example": true
+  },
+  "cdj-04": {
+    "productId": "cdj3000",
+    "tag": "CDJ-04",
+    "state": "available",
+    "example": true
+  },
+  "djma9-01": {
+    "productId": "djma9",
+    "tag": "DJMA9-01",
+    "state": "available",
+    "example": true
+  },
+  "djma9-02": {
+    "productId": "djma9",
+    "tag": "DJMA9-02",
+    "state": "available",
+    "example": true
+  },
+  "djm9-01": {
+    "productId": "djm900",
+    "tag": "DJM9-01",
+    "state": "available",
+    "example": true
+  },
+  "rx3-01": {
+    "productId": "xdjrx3",
+    "tag": "RX3-01",
+    "state": "available",
+    "example": true
+  },
+  "rx3-02": {
+    "productId": "xdjrx3",
+    "tag": "RX3-02",
+    "state": "available",
+    "example": true
+  },
+  "flx10-01": {
+    "productId": "ddjflx10",
+    "tag": "FLX10-01",
+    "state": "available",
+    "example": true
+  },
+  "flx10-02": {
+    "productId": "ddjflx10",
+    "tag": "FLX10-02",
+    "state": "available",
+    "example": true
+  },
+  "e712-01": {
+    "productId": "eon712",
+    "tag": "E712-01",
+    "state": "available",
+    "example": true
+  },
+  "e712-02": {
+    "productId": "eon712",
+    "tag": "E712-02",
+    "state": "available",
+    "example": true
+  },
+  "e712-03": {
+    "productId": "eon712",
+    "tag": "E712-03",
+    "state": "available",
+    "example": true
+  },
+  "e712-04": {
+    "productId": "eon712",
+    "tag": "E712-04",
+    "state": "available",
+    "example": true
+  },
+  "e712-05": {
+    "productId": "eon712",
+    "tag": "E712-05",
+    "state": "available",
+    "example": true
+  },
+  "e712-06": {
+    "productId": "eon712",
+    "tag": "E712-06",
+    "state": "available",
+    "example": true
+  },
+  "e715-01": {
+    "productId": "eon715",
+    "tag": "E715-01",
+    "state": "available",
+    "example": true
+  },
+  "e715-02": {
+    "productId": "eon715",
+    "tag": "E715-02",
+    "state": "available",
+    "example": true
+  },
+  "e715-03": {
+    "productId": "eon715",
+    "tag": "E715-03",
+    "state": "available",
+    "example": true
+  },
+  "e715-04": {
+    "productId": "eon715",
+    "tag": "E715-04",
+    "state": "available",
+    "example": true
+  },
+  "ks118-01": {
+    "productId": "ks118",
+    "tag": "KS118-01",
+    "state": "available",
+    "example": true
+  },
+  "ks118-02": {
+    "productId": "ks118",
+    "tag": "KS118-02",
+    "state": "available",
+    "example": true
+  },
+  "zlx-01": {
+    "productId": "zlx12",
+    "tag": "ZLX-01",
+    "state": "available",
+    "example": true
+  },
+  "zlx-02": {
+    "productId": "zlx12",
+    "tag": "ZLX-02",
+    "state": "available",
+    "example": true
+  },
+  "mic-01": {
+    "productId": "mic",
+    "tag": "MIC-01",
+    "state": "available",
+    "example": true
+  },
+  "mic-02": {
+    "productId": "mic",
+    "tag": "MIC-02",
+    "state": "available",
+    "example": true
+  },
+  "mic-03": {
+    "productId": "mic",
+    "tag": "MIC-03",
+    "state": "available",
+    "example": true
+  },
+  "mic-04": {
+    "productId": "mic",
+    "tag": "MIC-04",
+    "state": "available",
+    "example": true
+  },
+  "wash-01": {
+    "productId": "ledwash",
+    "tag": "WASH-01",
+    "state": "available",
+    "example": true
+  },
+  "wash-02": {
+    "productId": "ledwash",
+    "tag": "WASH-02",
+    "state": "available",
+    "example": true
+  },
+  "move-01": {
+    "productId": "movers",
+    "tag": "MOVE-01",
+    "state": "available",
+    "example": true
+  },
+  "move-02": {
+    "productId": "movers",
+    "tag": "MOVE-02",
+    "state": "available",
+    "example": true
+  },
+  "haze-01": {
+    "productId": "hazer",
+    "tag": "HAZE-01",
+    "state": "available",
+    "example": true
+  },
+  "stands-bulk": {
+    "productId": "stands",
+    "bulk": true,
+    "qty": 8,
+    "example": true
+  }
+}

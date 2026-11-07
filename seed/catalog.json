@@ -1,0 +1,538 @@
+{
+  "cdj3000": {
+    "kind": "item",
+    "cat": "dj",
+    "name": "Pioneer CDJ-3000",
+    "blurb": "Club-standard media player. USB and rekordbox ready.",
+    "rates": {
+      "night": 140,
+      "weekend": 210,
+      "week": 420
+    },
+    "bond": 500,
+    "kit": [
+      "CDJ-3000 player",
+      "IEC power cable",
+      "RCA and Pro DJ Link cables",
+      "Dust cover",
+      "Road case"
+    ],
+    "order": 1,
+    "club": true,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "djma9": {
+    "kind": "item",
+    "cat": "dj",
+    "name": "Pioneer DJM-A9",
+    "blurb": "Four-channel club mixer.",
+    "rates": {
+      "night": 120,
+      "weekend": 180,
+      "week": 360
+    },
+    "bond": 500,
+    "kit": [
+      "DJM-A9 mixer",
+      "IEC power cable",
+      "RCA cables",
+      "Road case"
+    ],
+    "order": 2,
+    "club": true,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "djm900": {
+    "kind": "item",
+    "cat": "dj",
+    "name": "Pioneer DJM-900NXS2",
+    "blurb": "Four-channel mixer, the previous club standard.",
+    "rates": {
+      "night": 95,
+      "weekend": 145,
+      "week": 285
+    },
+    "bond": 400,
+    "kit": [
+      "DJM-900NXS2 mixer",
+      "IEC power cable",
+      "RCA cables",
+      "Road case"
+    ],
+    "order": 3,
+    "club": true,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "xdjrx3": {
+    "kind": "item",
+    "cat": "dj",
+    "name": "Pioneer XDJ-RX3",
+    "blurb": "All-in-one system. Plays straight from USB, no laptop needed.",
+    "rates": {
+      "night": 120,
+      "weekend": 180,
+      "week": 360
+    },
+    "bond": 400,
+    "kit": [
+      "XDJ-RX3 unit",
+      "IEC power cable",
+      "USB-C cable",
+      "RCA and XLR output leads",
+      "Padded case"
+    ],
+    "order": 4,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "ddjflx10": {
+    "kind": "item",
+    "cat": "dj",
+    "name": "Pioneer DDJ-FLX10",
+    "blurb": "Four-deck controller for rekordbox or Serato on your laptop.",
+    "rates": {
+      "night": 70,
+      "weekend": 105,
+      "week": 210
+    },
+    "bond": 250,
+    "kit": [
+      "DDJ-FLX10 controller",
+      "Power adapter",
+      "USB-C cable",
+      "RCA leads",
+      "Carry bag"
+    ],
+    "order": 5,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "eon712": {
+    "kind": "item",
+    "cat": "pa",
+    "name": "JBL EON712 speaker",
+    "blurb": "12-inch powered speaker. Good for up to 50 guests as a pair.",
+    "rates": {
+      "night": 55,
+      "weekend": 85,
+      "week": 165
+    },
+    "bond": 200,
+    "kit": [
+      "EON712 speaker",
+      "IEC power cable",
+      "10 m XLR lead",
+      "Cover"
+    ],
+    "order": 10,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "eon715": {
+    "kind": "item",
+    "cat": "pa",
+    "name": "JBL EON715 speaker",
+    "blurb": "15-inch powered speaker with more low end.",
+    "rates": {
+      "night": 65,
+      "weekend": 100,
+      "week": 195
+    },
+    "bond": 250,
+    "kit": [
+      "EON715 speaker",
+      "IEC power cable",
+      "10 m XLR lead",
+      "Cover"
+    ],
+    "order": 11,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "ks118": {
+    "kind": "item",
+    "cat": "pa",
+    "name": "QSC KS118 subwoofer",
+    "blurb": "18-inch powered sub for dance floors over 80 guests.",
+    "rates": {
+      "night": 90,
+      "weekend": 135,
+      "week": 270
+    },
+    "bond": 300,
+    "kit": [
+      "KS118 sub",
+      "IEC power cable",
+      "2× XLR link leads",
+      "Cover"
+    ],
+    "order": 12,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "zlx12": {
+    "kind": "item",
+    "cat": "pa",
+    "name": "EV ZLX-12P booth monitor",
+    "blurb": "Monitor so the DJ hears the mix clearly.",
+    "rates": {
+      "night": 45,
+      "weekend": 70,
+      "week": 135
+    },
+    "bond": 150,
+    "kit": [
+      "ZLX-12P speaker",
+      "IEC power cable",
+      "XLR lead"
+    ],
+    "order": 13,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "stands": {
+    "kind": "item",
+    "cat": "pa",
+    "name": "Speaker stand pair",
+    "blurb": "Two tripod stands for 12- or 15-inch tops.",
+    "rates": {
+      "night": 10,
+      "weekend": 15,
+      "week": 30
+    },
+    "bond": 50,
+    "kit": [
+      "2× tripod stands",
+      "Carry bag"
+    ],
+    "order": 14,
+    "club": false,
+    "tracking": "bulk",
+    "unitLabel": "Pair",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "mic": {
+    "kind": "item",
+    "cat": "light",
+    "name": "Shure SLXD24 wireless mic",
+    "blurb": "Handheld wireless mic for speeches and MCs.",
+    "rates": {
+      "night": 30,
+      "weekend": 45,
+      "week": 90
+    },
+    "bond": 150,
+    "kit": [
+      "Handheld transmitter",
+      "Receiver with aerials",
+      "Power supply",
+      "XLR lead",
+      "2× spare AA batteries"
+    ],
+    "order": 20,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "ledwash": {
+    "kind": "item",
+    "cat": "light",
+    "name": "LED wash 4-pack",
+    "blurb": "Four colour-wash pars with a simple controller.",
+    "rates": {
+      "night": 45,
+      "weekend": 70,
+      "week": 135
+    },
+    "bond": 150,
+    "kit": [
+      "4× LED pars",
+      "DMX controller",
+      "Power and DMX leads",
+      "Stand bar"
+    ],
+    "order": 21,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Set",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "movers": {
+    "kind": "item",
+    "cat": "light",
+    "name": "Moving head pair",
+    "blurb": "Two beam moving heads for club-style lighting.",
+    "rates": {
+      "night": 80,
+      "weekend": 120,
+      "week": 240
+    },
+    "bond": 400,
+    "kit": [
+      "2× moving heads",
+      "Power and DMX leads",
+      "Flight case"
+    ],
+    "order": 22,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Pair",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "hazer": {
+    "kind": "item",
+    "cat": "light",
+    "name": "Hazer",
+    "blurb": "Water-based haze so lights show up. Check venue smoke alarms first.",
+    "rates": {
+      "night": 40,
+      "weekend": 60,
+      "week": 120
+    },
+    "bond": 150,
+    "kit": [
+      "Hazer",
+      "1 L haze fluid",
+      "Power lead"
+    ],
+    "order": 23,
+    "club": false,
+    "tracking": "serial",
+    "unitLabel": "Each",
+    "buffer": {
+      "before": 2,
+      "after": 4
+    },
+    "example": true
+  },
+  "party50": {
+    "kind": "package",
+    "cat": "packages",
+    "name": "Party 50",
+    "blurb": "Two speakers and a wireless mic. Plug in a phone or laptop and go.",
+    "rates": {
+      "night": 130,
+      "weekend": 195,
+      "week": 390
+    },
+    "bond": 300,
+    "components": [
+      {
+        "id": "eon712",
+        "qty": 2
+      },
+      {
+        "id": "stands",
+        "qty": 1
+      },
+      {
+        "id": "mic",
+        "qty": 1
+      }
+    ],
+    "kit": [
+      "2× JBL EON712 speakers",
+      "Speaker stand pair",
+      "Shure wireless mic",
+      "All power and XLR leads",
+      "3.5 mm to XLR adapter for phone or laptop"
+    ],
+    "order": 1,
+    "club": false,
+    "unitLabel": "Package",
+    "example": true,
+    "guests": 50
+  },
+  "allinone": {
+    "kind": "package",
+    "cat": "packages",
+    "name": "All-in-one + PA",
+    "blurb": "An XDJ-RX3 with a speaker pair. Bring USBs, no laptop needed.",
+    "rates": {
+      "night": 190,
+      "weekend": 285,
+      "week": 570
+    },
+    "bond": 500,
+    "components": [
+      {
+        "id": "xdjrx3",
+        "qty": 1
+      },
+      {
+        "id": "eon712",
+        "qty": 2
+      },
+      {
+        "id": "stands",
+        "qty": 1
+      }
+    ],
+    "kit": [
+      "Pioneer XDJ-RX3",
+      "2× JBL EON712 speakers",
+      "Speaker stand pair",
+      "All power and XLR leads"
+    ],
+    "order": 2,
+    "club": false,
+    "unitLabel": "Package",
+    "example": true,
+    "guests": 80
+  },
+  "party120": {
+    "kind": "package",
+    "cat": "packages",
+    "name": "Party 120",
+    "blurb": "Bigger speakers, an 18-inch sub and colour wash lighting.",
+    "rates": {
+      "night": 260,
+      "weekend": 390,
+      "week": 780
+    },
+    "bond": 500,
+    "components": [
+      {
+        "id": "eon715",
+        "qty": 2
+      },
+      {
+        "id": "ks118",
+        "qty": 1
+      },
+      {
+        "id": "stands",
+        "qty": 1
+      },
+      {
+        "id": "mic",
+        "qty": 1
+      },
+      {
+        "id": "ledwash",
+        "qty": 1
+      }
+    ],
+    "kit": [
+      "2× JBL EON715 speakers",
+      "QSC KS118 18\" subwoofer",
+      "Speaker stand pair",
+      "Shure wireless mic",
+      "LED wash 4-pack with controller",
+      "All power and XLR leads"
+    ],
+    "order": 3,
+    "club": false,
+    "unitLabel": "Package",
+    "example": true,
+    "guests": 120
+  },
+  "clubbooth": {
+    "kind": "package",
+    "cat": "packages",
+    "name": "Club Booth",
+    "blurb": "Two CDJ-3000s, a DJM-A9 and a booth monitor. The club setup at home.",
+    "rates": {
+      "night": 360,
+      "weekend": 540,
+      "week": 1080
+    },
+    "bond": 1000,
+    "components": [
+      {
+        "id": "cdj3000",
+        "qty": 2
+      },
+      {
+        "id": "djma9",
+        "qty": 1
+      },
+      {
+        "id": "zlx12",
+        "qty": 1
+      }
+    ],
+    "kit": [
+      "2× Pioneer CDJ-3000",
+      "Pioneer DJM-A9 mixer",
+      "EV ZLX-12P booth monitor",
+      "Pro DJ Link, RCA and power cables",
+      "Power board"
+    ],
+    "order": 4,
+    "club": true,
+    "unitLabel": "Package",
+    "example": true
+  }
+}

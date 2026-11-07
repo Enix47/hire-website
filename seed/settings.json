@@ -1,0 +1,50 @@
+{
+  "depositPct": 0.3,
+  "bondFloor": 200,
+  "setupRate": 90,
+  "setupHours": 2,
+  "missingFee": 25,
+  "graceHours": 1,
+  "quoteHours": 72,
+  "slots": {
+    "weekday": [
+      "10:00",
+      "17:00",
+      "19:00"
+    ],
+    "sat": [
+      "09:00",
+      "12:00"
+    ],
+    "sun": []
+  },
+  "zones": [
+    {
+      "id": "inner",
+      "name": "Inner Brisbane (up to 10 km)",
+      "fee": 60
+    },
+    {
+      "id": "middle",
+      "name": "Middle ring (10–25 km)",
+      "fee": 95
+    },
+    {
+      "id": "outer",
+      "name": "Outer (25–40 km)",
+      "fee": 140
+    }
+  ],
+  "peak": [
+    {
+      "date": "2026-12-24",
+      "label": "Christmas Eve"
+    },
+    {
+      "date": "2026-12-31",
+      "label": "New Year's Eve"
+    }
+  ],
+  "pickupNote": "Pickup from our Brisbane store (address TBC)",
+  "example": true
+}
